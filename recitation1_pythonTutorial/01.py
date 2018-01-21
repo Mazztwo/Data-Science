@@ -23,7 +23,7 @@ from requests import get
 
 ##################
 
-### Part 4 - Convert to CSV #######
+### Part 4/5/6/7 #######
 print("Opening JSON file and load data.")
 json_file = open("hours.json", 'r')
 json_data = json.load(json_file) # or json.load(open("file.json", 'r'))
@@ -45,24 +45,39 @@ csv_writer.writerow(json_data[0].keys())
 for line in json_data: 
     csv_writer.writerow(line.values())
 
-print("Close CSV file.")
+print("Close CSV file.\n")
 csv_blank.close()
 
-##################
+print("Open CSV file.")
+csv_raw = open("hours.csv", "r")
 
-### Part 5 #######
+print("Creating CSV object with raw file.")
+csv_file = csv.reader(csv_raw)
 
+print("Print all rows of CSV object.")
+for row in csv_file:
+    print(row)
 
-##################
+# Don't know why, but the for loop below
+# would not work as written unless I closed
+# the CSV file and reopened it...
+csv_raw.close()
+csv_raw = open("hours.csv", "r")
+csv_file = csv.reader(csv_raw)
+###############################
 
-### Part 6 #######
+print("\nPrint individual cells of CSV object.")
+for row in csv_file:
 
+    #This also works
+    #print(" ".join(row))
 
-##################
+    print("rawr")
+    for i in range(0, len(row)):
+        print(row[i])
+        
+print("Close CSV file.\n")
+csv_raw.close()
 
-### Part 7 #######
-
-
-##################
 
 
