@@ -81,7 +81,7 @@ import datetime
 #fig = plt.figure(figsize=(10, 16))
 
 # Subplot of basic graph
-#plt.subplot(211)
+#plt.subplot(211) # first 2 = 2 plots, one top, one bottom, third 1 refers to first(top plot)
 #p1 = plt.plot(df['EST'],df['MeanDew PointF'])
 #p2 = plt.plot(df['EST'],df['Mean TemperatureF'])
 #plt.legend([p1[0],p2[0]], ['Mean Dew Point', 'Mean Temperature'])
@@ -92,7 +92,7 @@ import datetime
 #plt.title('Mean Tempertaures for August 2017')
 
 # Subplot of bar graph graph
-#plt.subplot(212)
+#plt.subplot(212) # first 2 = 2 plots, one top, one bottom, third 2 refers to second(bottom plot)
 #plt.bar(range(len(df['EST'])),df['Mean Humidity'], align = 'center')
 
 #plt.xticks(range(len(df['EST'])), df['EST'].dt.strftime('%Y-%m-%d'), rotation = 90, fontsize = 8)
@@ -142,7 +142,6 @@ print(dataframe.dtypes)
 print("\nInitialize fig size.")
 fig = plt.figure(figsize=(10, 6))
 
-
 print("Grab axis data.")
 #                        X AXIS                    Y AXIS
 plt.scatter(dataframe['2014 land area'], dataframe['2014 estimate'])
@@ -160,13 +159,34 @@ print("Display plot.")
 plt.show()
 
 
-
-
-
 # **Task 2** 
-# 
 # Plot a bar plot showing each city's 2014 population estimate given by '2014 estimate' column. 
-# 
+
+# Bar Plot
+print("\nSet figure size.")
+fig = plt.figure(figsize=(9, 6))
+
+print("Grab axis data.")
+#                X Axis                   Y Axis
+plt.bar(dataframe['City'], dataframe['2014 estimate'], align = 'center')
+
+# Formatting graph
+print("Formatting plot.")
+plt.xticks(dataframe['City'], rotation = 90, fontsize = 8)
+plt.xlabel('City')
+plt.ylabel('2014 Estimate')
+plt.title('2014 City Popualtions')
+
+# Saves figure
+#plt.savefig("bar_plot.png")
+
+print("Display plot.")
+plt.show()
+
+
+
+
+
 # **Task 3** 
 # 
 # Now that you plotted a simple bar plot, try plotting a grouped bar plot that shows both 2010 and 2014 estimate for each city on the same plot. This means that there will be two grouped bars per city on your graph. 
