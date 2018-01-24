@@ -131,13 +131,38 @@ import datetime
 # 
 # You need to read the file into a dataframe and perform the following three tasks during the recitation. 
 #
-print("Read CSV from web address.")
-df = pd.read_csv('http://cs1656.org/data/top12cities.csv', sep=',', engine='python')
+print("\nRead CSV from web address.")
+dataframe = pd.read_csv('http://cs1656.org/data/top12cities.csv', sep=',', engine='python')
+
+print("\nPrint dataframe column name and data types:")
+print(dataframe.dtypes)
 
 # **Task 1** 
-
 # Plot a scatter plot of with 'land area' on the x-axis and '2014 estimate' on the y-axis. After observing the plot, do you think the two variables are strongly or weakly correlated? Is the correlation positive or negative?
-# 
+print("\nInitialize fig size.")
+fig = plt.figure(figsize=(10, 6))
+
+
+print("Grab axis data.")
+#                        X AXIS                    Y AXIS
+plt.scatter(dataframe['2014 land area'], dataframe['2014 estimate'])
+
+# Formatting graph
+print("Format graph.")
+plt.xlabel('2014 Land Area')
+plt.ylabel('2014 Population Desnity Estimate')
+plt.title('Land Area and Estimate Population Desnity for 2014')
+
+#Saves figure
+#plt.savefig("scatter_plot.png")
+
+print("Display plot.")
+plt.show()
+
+
+
+
+
 # **Task 2** 
 # 
 # Plot a bar plot showing each city's 2014 population estimate given by '2014 estimate' column. 
