@@ -5,6 +5,7 @@
 
 import matplotlib.pyplot as plt
 import pandas as pd
+
 import datetime
 
 
@@ -140,7 +141,7 @@ print(dataframe.dtypes)
 # **Task 1** 
 # Plot a scatter plot of with 'land area' on the x-axis and '2014 estimate' on the y-axis. After observing the plot, do you think the two variables are strongly or weakly correlated? Is the correlation positive or negative?
 print("\nInitialize fig size.")
-fig = plt.figure(figsize=(10, 6))
+plt.figure(figsize=(10, 6))
 
 print("Grab axis data.")
 #                        X AXIS                    Y AXIS
@@ -156,7 +157,7 @@ plt.title('Land Area and Estimate Population Desnity for 2014')
 #plt.savefig("scatter_plot.png")
 
 print("Display plot.")
-plt.show()
+#plt.show()
 
 
 # **Task 2** 
@@ -174,8 +175,9 @@ plt.bar(dataframe['City'], dataframe['2014 estimate'], align = 'center')
 print("Formatting plot.")
 plt.xticks(dataframe['City'], rotation = 90, fontsize = 8)
 plt.xlabel('City')
-plt.ylabel('2014 Estimate')
-plt.title('2014 City Popualtions')
+plt.ylabel('Population Estimate')
+plt.title('2014 City Populations')
+
 
 # Saves figure
 #plt.savefig("bar_plot.png")
@@ -183,10 +185,24 @@ plt.title('2014 City Popualtions')
 print("Display plot.")
 plt.show()
 
-
-
-
-
 # **Task 3** 
 # 
 # Now that you plotted a simple bar plot, try plotting a grouped bar plot that shows both 2010 and 2014 estimate for each city on the same plot. This means that there will be two grouped bars per city on your graph. 
+
+
+
+fig = plt.figure(figsize=(5, 5))
+
+# Subplot of basic graph
+plt.subplot() 
+p1 = plt.bar(dataframe['City'], dataframe['2014 estimate'], align = 'center')
+p2 = plt.bar(dataframe['City'], dataframe['2010 Census'], align = 'center')
+plt.legend([p1[0],p2[0]], ['2014 estimate', '2010 census'])
+
+plt.xticks(dataframe['City'], rotation = 90, fontsize = 8)
+plt.xlabel('City')
+plt.ylabel('Population Estimate')
+plt.title('2014 City Populations')
+
+print("Display plot.")
+plt.show()
