@@ -34,6 +34,7 @@ def main(argv):
     games_away = {}
     per_wins_home = {}
     per_wins_away = {}
+    per_wins_temp_less = {}
 
 
 
@@ -102,7 +103,7 @@ def main(argv):
 
             # Percent wins
             # If home wins
-            if(row[2] > row[4]):
+            if(int(row[2]) > int(row[4])):
                 if(row[1] in per_wins):
                     per_wins[row[1]] += 1
                 else:
@@ -115,6 +116,7 @@ def main(argv):
                     per_wins_home[row[1]] += 1
                 else:
                     per_wins_home[row[1]] = 1
+
             # If away wins
             else:
                 if(row[3] in per_wins):
@@ -177,9 +179,7 @@ def main(argv):
         else:
             humidity[team] = round(humidity[team] / games_played[team], 2)
 
-    # Calculate PER.WINS
-    for team in per_wins:
-        per_wins[team] = round( (per_wins[team] / (games_home[team] + games_away[team]))*100 , 2)
+
 
     # Calculate PER.WINS.HOME
     for team in per_wins_home:
@@ -189,14 +189,60 @@ def main(argv):
     for team in per_wins_away:
         per_wins_away[team] = round((per_wins_away[team] / games_away[team])*100,2)    
 
+    # Reset Iterator
+    csv_raw_input.close() 
+    csv_raw_input = open(argv[1], newline='')
+    csv_file_input = csv.reader(csv_raw_input)
+    numRow = 0
+
+    # Calculate PER.WINS.TEMP.LESS    
+    for row in csv_file_input:
+        if(numRow != 0):
+            if(int(row[2]) > int(row[4])):
+                if(row[6] != ''):
+                    lower = min(int(row[5]),int(row[6]))
+                    if(temps[row[1]] > lower):
+                        if(row[1] in per_wins_temp_less):
+                            per_wins_temp_less[row[1]] += 1
+                        else:
+                            per_wins_temp_less[row[1]] = 1
+            else:
+                if(row[6] != ''):
+                    lower = min(int(row[5]),int(row[6]))
+                    if(temps[row[3]] > lower):
+                        if(row[3] in per_wins_temp_less):
+                            per_wins_temp_less[row[3]] += 1
+                        else:
+                            per_wins_temp_less[row[3]] = 1
+
+            numRow += 1
+        else:
+            numRow += 1
+
+
+    # Calculate PER.WINS.TEMP.LESS
+    for team in per_wins_temp_less:
+        per_wins_temp_less[team] = round( (per_wins_temp_less[team] / per_wins[team])*100 ,2)
+
+    # Calculate PER.WINS
+    for team in per_wins:
+        per_wins[team] = round( (per_wins[team] / (games_home[team] + games_away[team]))*100 , 2)
+
+
+
+
     # READY TO OUTPUT
     # AVG.TEMP --> temps
     # AVG.HUM --> humidity
     # PER.WINS --> per_wins
     # PER.WINS.HOME --> per_wins_home
     # PER.WINS.AWAY --> per_wins_away
+    # PER.WINS.TEMP.LESS --> per_wins_temp_less
 
-    print(per_wins_away)
+    print(per_wins_temp_less)
+
+    
+
 
 
     #csv_file_output.writerow()
