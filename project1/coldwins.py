@@ -32,6 +32,8 @@ def main(argv):
     per_wins = {}
     games_home = {}
     games_away = {}
+    per_wins_home = {}
+    per_wins_away = {}
 
 
 
@@ -109,6 +111,10 @@ def main(argv):
                 if(row[3] not in per_wins):
                     per_wins[row[3]] = 0
 
+                if(row[1] in per_wins_home):
+                    per_wins_home[row[1]] += 1
+                else:
+                    per_wins_home[row[1]] = 1
             # If away wins
             else:
                 if(row[3] in per_wins):
@@ -118,6 +124,11 @@ def main(argv):
                     
                 if(row[1] not in per_wins):
                     per_wins[row[1]] = 0
+
+                if(row[3] in per_wins_away):
+                    per_wins_away[row[3]] += 1
+                else:
+                    per_wins_away[row[3]] = 1
                            
                
             # Total games home and away
@@ -170,13 +181,22 @@ def main(argv):
     for team in per_wins:
         per_wins[team] = round( (per_wins[team] / (games_home[team] + games_away[team]))*100 , 2)
 
+    # Calculate PER.WINS.HOME
+    for team in per_wins_home:
+        per_wins_home[team] = round((per_wins_home[team] / games_home[team])*100,2)
+
+    # Calculate PER.WINS.HOME
+    for team in per_wins_away:
+        per_wins_away[team] = round((per_wins_away[team] / games_away[team])*100,2)    
+
     # READY TO OUTPUT
     # AVG.TEMP --> temps
     # AVG.HUM --> humidity
     # PER.WINS --> per_wins
-    
+    # PER.WINS.HOME --> per_wins_home
+    # PER.WINS.AWAY --> per_wins_away
 
-    print(per_wins)
+    print(per_wins_away)
 
 
     #csv_file_output.writerow()
