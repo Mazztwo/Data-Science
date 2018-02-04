@@ -15,17 +15,13 @@ def main(argv):
 
     # Create CSV objects with raw files
     csv_file_input = csv.reader(csv_raw_input)
-    #csv_file_output = csv.writer(csv_raw_output)
+    csv_file_output = csv.writer(csv_raw_output)
 
     last_row = []
 
     # Headers for output file
-    headers = ["team", "AVG.TEMP", "AVG.HUM" ]
+    output_headers = ["team_name", "AVG.TEMP", "AVG.HUM", "PER.WINS", "PER.WINS.HOME", "PER.WINS.AWAY", "PER.WINS.TEMP.LESS", "PER.WINS.TEMP.MORE", "PER.WINS.HUM.LESS", "PER.WINS.HUM.MORE"]
 
-
-    # games_played --> {team: numGames}
-    # temps --> {team: sumHomeTemps}
-    # humidity --> {team: sumHomeHumidity} 
     games_played = {}
     temps = {}
     humidity = {}
@@ -39,10 +35,7 @@ def main(argv):
     per_wins_hum_less = {}
     per_wins_hum_more = {}
 
-
-
     numRow = 0
-
 
     # dict.keys()
     # dict.values()
@@ -222,9 +215,6 @@ def main(argv):
                         per_wins_hum_more[row[3]] += 1
                     else:
                         per_wins_hum_more[row[3]] = 1 
-
-
-
             numRow += 1
         else:
             numRow += 1
@@ -244,11 +234,29 @@ def main(argv):
     for team in per_wins:
         per_wins[team] = round( (per_wins[team] / (games_home[team] + games_away[team]))*100 , 2)
 
-    
-    # IF A TEAM DOES NOT EXIST IN A CATEGORY,
-    # ADD IT AND PUT A 0
-
-
+    # IF A TEAM DOES NOT EXIST IN A CATEGORY, ADD IT.
+    for team in per_wins:
+        if(team not in per_wins_home):
+            per_wins_home[team] = 0.00
+        if(team not in per_wins_away):
+            per_wins_away[team] = 0.00
+        if(team not in per_wins_temp_less):
+            per_wins_temp_less[team] = 0.00
+        if(team not in per_wins_temp_more):
+            per_wins_temp_more[team] = 0.00
+        if(team not in per_wins_hum_less):
+            per_wins_hum_less[team] = 0.00
+        if(team not in per_wins_hum_more):
+            per_wins_hum_more[team] = 0.00
+    # Convert all percents to strings and append %
+    for team in per_wins:
+        per_wins[team] = str(per_wins[team]) + "%"
+        per_wins_home[team] = str(per_wins_home[team]) + "%"
+        per_wins_away[team] = str(per_wins_away[team]) + "%"
+        per_wins_temp_less[team] = str(per_wins_temp_less[team]) + "%"
+        per_wins_temp_more[team] = str(per_wins_temp_more[team]) + "%"
+        per_wins_hum_less[team] = str(per_wins_hum_less[team]) + "%"
+        per_wins_hum_more[team] = str(per_wins_hum_more[team]) + "%"
 
     # READY TO OUTPUT
     # AVG.TEMP --> temps
@@ -261,10 +269,12 @@ def main(argv):
     # PER.WINS.HUM.LESS --> per_wins_hum_less
     # PER.WINS.HUM.MORE --> per_wins_hum_more
 
-    print(per_wins_hum_less)
-
-    
-
+    # Write all results
+    if(len(argv) == 3):
+        csv_file_output.writerow(output_headers)
+        for team in per_wins:
+            row = [team, temps[team], humidity[team], per_wins[team], per_wins_home[team], per_wins_away[team], per_wins_temp_less[team], per_wins_temp_more[team], per_wins_hum_less[team], per_wins_hum_more[team]]
+            csv_file_output.writerow(row)
 
 
     #csv_file_output.writerow()
