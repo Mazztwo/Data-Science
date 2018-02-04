@@ -35,6 +35,7 @@ def main(argv):
     per_wins_home = {}
     per_wins_away = {}
     per_wins_temp_less = {}
+    per_wins_temp_more = {}
 
 
 
@@ -200,21 +201,34 @@ def main(argv):
         if(numRow != 0):
             if(int(row[2]) > int(row[4])):
                 if(row[6] != ''):
-                    lower = min(int(row[5]),int(row[6]))
-                    if(temps[row[1]] > lower):
+                    curr_temp = min(int(row[5]),int(row[6]))
+                else:
+                    curr_temp = int(row[5])
+                    if(temps[row[1]] > curr_temp):
                         if(row[1] in per_wins_temp_less):
                             per_wins_temp_less[row[1]] += 1
                         else:
                             per_wins_temp_less[row[1]] = 1
+                    else:
+                        if(row[1] in per_wins_temp_more):
+                            per_wins_temp_more[row[1]] += 1
+                        else:
+                            per_wins_temp_more[row[1]] = 1
             else:
                 if(row[6] != ''):
-                    lower = min(int(row[5]),int(row[6]))
-                    if(temps[row[3]] > lower):
+                    curr_temp = min(int(row[5]),int(row[6]))
+                else:
+                    curr_temp = int(row[5])
+                    if(temps[row[3]] > curr_temp):
                         if(row[3] in per_wins_temp_less):
                             per_wins_temp_less[row[3]] += 1
                         else:
                             per_wins_temp_less[row[3]] = 1
-
+                    else:
+                        if(row[3] in per_wins_temp_more):
+                            per_wins_temp_more[row[3]] += 1
+                        else:
+                            per_wins_temp_more[row[3]] = 1
             numRow += 1
         else:
             numRow += 1
@@ -223,6 +237,10 @@ def main(argv):
     # Calculate PER.WINS.TEMP.LESS
     for team in per_wins_temp_less:
         per_wins_temp_less[team] = round( (per_wins_temp_less[team] / per_wins[team])*100 ,2)
+
+    # Calculate PER.WINS.TEMP.MORE
+    for team in per_wins_temp_more:
+        per_wins_temp_more[team] = round( (per_wins_temp_more[team] / per_wins[team])*100 ,2)
 
     # Calculate PER.WINS
     for team in per_wins:
@@ -238,8 +256,10 @@ def main(argv):
     # PER.WINS.HOME --> per_wins_home
     # PER.WINS.AWAY --> per_wins_away
     # PER.WINS.TEMP.LESS --> per_wins_temp_less
+    # PER.WINS.TEMP.MORE --> per_wins_temp_more
 
-    print(per_wins_temp_less)
+
+    #print(per_wins_temp_more)
 
     
 
