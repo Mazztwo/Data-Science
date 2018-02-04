@@ -17,8 +17,19 @@ def main(argv):
     csv_file_input = csv.reader(csv_raw_input)
     #csv_file_output = csv.writer(csv_raw_output)
 
-    #headers = ["team", "AVG.TEMP", "AVG.HUM" ]
-    teams = {}
+    last_row = []
+
+    # Headers for output file
+    headers = ["team", "AVG.TEMP", "AVG.HUM" ]
+
+
+    # games_played structure {team: numGames}
+    # temps structure {team: sumHomeTemps}
+    games_played = {}
+    temps = {}
+
+
+
     numRow = 0
 
 
@@ -29,25 +40,58 @@ def main(argv):
     # team = row[1]
     # temp = row[5]
     # windchill = row[6]
+    # total = 1-267
 
     for row in csv_file_input:
 
-        if(numRow != 0):
+        last_row = row
 
-            if(row[1] in teams):
-                teams[row[1]] += 1
+        if(numRow != 0):
+            
+            # If team already in list, add to their totals
+            if(row[1] in games_played):
+
+                # Increment games played
+                games_played[row[1]] += 1
+
+                # If windchill present, add to temps min of the two
+                if(row[6] != ''):
+                   temps[row[1]] += min(int(row[5]), int(row[6]))
+
+                # If no windchill present, add home temp to total
+                else:
+                    temps[row[1]] += int(row[5])
+
+            # If team does not appear in list, initialize totals
             else:
-                teams[row[1]] = 1
+                games_played[row[1]] = 1
+                temps[row[1]] = int(row[5])
 
             numRow += 1
         else:
             numRow += 1
 
-    # Check superbowl, last game, and remove data from those
-    #   
+    # Remove superbowl temp/humidity data
+    if(last_row[6] != ''):
+        temps[last_row[1]] -= min(int(last_row[5]), int(last_row[6]))
+    else:
+        temps[last_row[1]] -= int(last_row[5])
 
-    print(teams.items())
-    print("NUM ROWS: %d" % (numRow))
+    # Calculate AVG.TEMP
+    for team in temps:
+
+        # Don't include superbowl data in temp/humidity calculation
+        if(team == last_row[1]):
+            temps[team] = round(temps[team] / (games_played[team] - 1), 2)
+        else:
+            temps[team] = round(temps[team] / games_played[team], 2)
+
+
+    
+
+
+    # READY TO OUTPUT
+    # AVG.TEMP --> temps
 
 
 
