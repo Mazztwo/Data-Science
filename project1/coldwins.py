@@ -36,6 +36,8 @@ def main(argv):
     per_wins_away = {}
     per_wins_temp_less = {}
     per_wins_temp_more = {}
+    per_wins_hum_less = {}
+    per_wins_hum_more = {}
 
 
 
@@ -45,36 +47,21 @@ def main(argv):
     # dict.keys()
     # dict.values()
     # dict.items()
-    
-    # home team = row[1]
-    # home score = row[2]
-    # away team = row[3]
-    # away score = row[4]
-    # temp = row[5]
-    # windchill = row[6]
-    # humidity = row[7]
-    # total = 1-267
+
 
     for row in csv_file_input:
-
         last_row = row
-
         if(numRow != 0):
-            
             # If team already in list, add to their totals
             if(row[1] in games_played):
-
                 # Increment games played
                 games_played[row[1]] += 1
-
                 # If windchill present, add to temps min of the two
                 if(row[6] != ''):
                     temps[row[1]] += min(int(row[5]), int(row[6]))
-
                 # If no windchill present, add home temp to total
                 else:
                     temps[row[1]] += int(row[5])
-
                 # Increment humidity
                 if( row[7] == '' ):
                     humidity[row[1]] += 0
@@ -82,15 +69,10 @@ def main(argv):
                     humidity[row[1]] += int(row[7][0])
                 else:
                     humidity[row[1]] += int(row[7][0:2])
-
-                # Percent wins
-                 
-
             # If team does not appear in list, initialize totals
             else:
                 games_played[row[1]] = 1
                 temps[row[1]] = int(row[5])
-
                 # Humidity length can be:
                 # 0 --> 0% humidity --> ''
                 # 2 --> x% humidity --> x%
@@ -101,39 +83,31 @@ def main(argv):
                     humidity[row[1]] = int(row[7][0])
                 else:
                     humidity[row[1]] = int(row[7][0:2])
-
             # Percent wins
             # If home wins
             if(int(row[2]) > int(row[4])):
                 if(row[1] in per_wins):
                     per_wins[row[1]] += 1
                 else:
-                    per_wins[row[1]] = 1
-                    
+                    per_wins[row[1]] = 1          
                 if(row[3] not in per_wins):
                     per_wins[row[3]] = 0
-
                 if(row[1] in per_wins_home):
                     per_wins_home[row[1]] += 1
                 else:
                     per_wins_home[row[1]] = 1
-
             # If away wins
             else:
                 if(row[3] in per_wins):
                     per_wins[row[3]] += 1
                 else:
-                    per_wins[row[3]] = 1
-                    
+                    per_wins[row[3]] = 1  
                 if(row[1] not in per_wins):
                     per_wins[row[1]] = 0
-
                 if(row[3] in per_wins_away):
                     per_wins_away[row[3]] += 1
                 else:
                     per_wins_away[row[3]] = 1
-                           
-               
             # Total games home and away
             if(row[1] in games_home):
                 games_home[row[1]] += 1
@@ -144,24 +118,19 @@ def main(argv):
                 games_away[row[3]] += 1
             else:
                 games_away[row[3]] = 1
-           
-
             numRow += 1
         else:
             numRow += 1
-
     # Remove superbowl temp/humidity data
     if(last_row[6] != ''):
         temps[last_row[1]] -= min(int(last_row[5]), int(last_row[6]))
     else:
         temps[last_row[1]] -= int(last_row[5])
-
     if(last_row[7] != ''):
         if( len(last_row[7])  == 2 ):
             humidity[last_row[1]] -= int(last_row[7][0])
         else:
             humidity[last_row[1]] -= int(last_row[7][0:2])
-
     # Calculate AVG.TEMP
     for team in temps:
 
@@ -170,32 +139,24 @@ def main(argv):
             temps[team] = round(temps[team] / (games_played[team] - 1), 2)
         else:
             temps[team] = round(temps[team] / games_played[team], 2)
-
     # Calculate AVG.HUM
     for team in humidity:
-
         # Don't include superbowl data in temp/humidity calculation
         if(team == last_row[1]):
             humidity[team] = round(humidity[team] / (games_played[team] - 1), 2)
         else:
             humidity[team] = round(humidity[team] / games_played[team], 2)
-
-
-
     # Calculate PER.WINS.HOME
     for team in per_wins_home:
         per_wins_home[team] = round((per_wins_home[team] / games_home[team])*100,2)
-
     # Calculate PER.WINS.HOME
     for team in per_wins_away:
         per_wins_away[team] = round((per_wins_away[team] / games_away[team])*100,2)    
-
     # Reset Iterator
     csv_raw_input.close() 
     csv_raw_input = open(argv[1], newline='')
     csv_file_input = csv.reader(csv_raw_input)
     numRow = 0
-
     # Calculate PER.WINS.TEMP.LESS    
     for row in csv_file_input:
         if(numRow != 0):
@@ -204,16 +165,32 @@ def main(argv):
                     curr_temp = min(int(row[5]),int(row[6]))
                 else:
                     curr_temp = int(row[5])
-                    if(temps[row[1]] > curr_temp):
-                        if(row[1] in per_wins_temp_less):
-                            per_wins_temp_less[row[1]] += 1
-                        else:
-                            per_wins_temp_less[row[1]] = 1
+                if(temps[row[1]] > curr_temp):
+                    if(row[1] in per_wins_temp_less):
+                        per_wins_temp_less[row[1]] += 1
                     else:
-                        if(row[1] in per_wins_temp_more):
-                            per_wins_temp_more[row[1]] += 1
-                        else:
-                            per_wins_temp_more[row[1]] = 1
+                        per_wins_temp_less[row[1]] = 1
+                else:
+                    if(row[1] in per_wins_temp_more):
+                        per_wins_temp_more[row[1]] += 1
+                    else:
+                        per_wins_temp_more[row[1]] = 1 
+                if( row[7] == '' ):
+                    curr_humidity = 0
+                elif( len(row[7])  == 2 ):
+                    curr_humidity= int(row[7][0])
+                else:
+                    curr_humidity= int(row[7][0:2])        
+                if(humidity[row[1]] > curr_humidity):
+                    if(row[1] in per_wins_hum_less):
+                        per_wins_hum_less[row[1]] += 1
+                    else:
+                        per_wins_hum_less[row[1]] = 1
+                else:
+                    if(row[1] in per_wins_hum_more):
+                        per_wins_hum_more[row[1]] += 1
+                    else:
+                        per_wins_hum_more[row[1]] = 1 
             else:
                 if(row[6] != ''):
                     curr_temp = min(int(row[5]),int(row[6]))
@@ -229,23 +206,47 @@ def main(argv):
                             per_wins_temp_more[row[3]] += 1
                         else:
                             per_wins_temp_more[row[3]] = 1
+                if( row[7] == '' ):
+                    curr_humidity = 0
+                elif( len(row[7])  == 2 ):
+                    curr_humidity= int(row[7][0])
+                else:
+                    curr_humidity= int(row[7][0:2])        
+                if(humidity[row[3]] > curr_humidity):
+                    if(row[3] in per_wins_hum_less):
+                        per_wins_hum_less[row[3]] += 1
+                    else:
+                        per_wins_hum_less[row[3]] = 1
+                else:
+                    if(row[3] in per_wins_hum_more):
+                        per_wins_hum_more[row[3]] += 1
+                    else:
+                        per_wins_hum_more[row[3]] = 1 
+
+
+
             numRow += 1
         else:
             numRow += 1
-
-
     # Calculate PER.WINS.TEMP.LESS
     for team in per_wins_temp_less:
         per_wins_temp_less[team] = round( (per_wins_temp_less[team] / per_wins[team])*100 ,2)
-
     # Calculate PER.WINS.TEMP.MORE
     for team in per_wins_temp_more:
         per_wins_temp_more[team] = round( (per_wins_temp_more[team] / per_wins[team])*100 ,2)
-
+    # Calculate PER.WINS.HUM.LESS
+    for team in per_wins_hum_less:
+        per_wins_hum_less[team] = round( (per_wins_hum_less[team] / per_wins[team])*100 ,2)
+    # Calculate PER.WINS.HUM.MORE
+    for team in per_wins_hum_more:
+        per_wins_hum_more[team] = round( (per_wins_hum_more[team] / per_wins[team])*100 ,2)
     # Calculate PER.WINS
     for team in per_wins:
         per_wins[team] = round( (per_wins[team] / (games_home[team] + games_away[team]))*100 , 2)
 
+    
+    # IF A TEAM DOES NOT EXIST IN A CATEGORY,
+    # ADD IT AND PUT A 0
 
 
 
@@ -257,9 +258,10 @@ def main(argv):
     # PER.WINS.AWAY --> per_wins_away
     # PER.WINS.TEMP.LESS --> per_wins_temp_less
     # PER.WINS.TEMP.MORE --> per_wins_temp_more
+    # PER.WINS.HUM.LESS --> per_wins_hum_less
+    # PER.WINS.HUM.MORE --> per_wins_hum_more
 
-
-    #print(per_wins_temp_more)
+    print(per_wins_hum_less)
 
     
 
