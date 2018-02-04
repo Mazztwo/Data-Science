@@ -29,6 +29,9 @@ def main(argv):
     games_played = {}
     temps = {}
     humidity = {}
+    per_wins = {}
+    games_home = {}
+    games_away = {}
 
 
 
@@ -39,7 +42,10 @@ def main(argv):
     # dict.values()
     # dict.items()
     
-    # team = row[1]
+    # home team = row[1]
+    # home score = row[2]
+    # away team = row[3]
+    # away score = row[4]
     # temp = row[5]
     # windchill = row[6]
     # humidity = row[7]
@@ -73,6 +79,9 @@ def main(argv):
                 else:
                     humidity[row[1]] += int(row[7][0:2])
 
+                # Percent wins
+                 
+
             # If team does not appear in list, initialize totals
             else:
                 games_played[row[1]] = 1
@@ -88,6 +97,40 @@ def main(argv):
                     humidity[row[1]] = int(row[7][0])
                 else:
                     humidity[row[1]] = int(row[7][0:2])
+
+            # Percent wins
+            # If home wins
+            if(row[2] > row[4]):
+                if(row[1] in per_wins):
+                    per_wins[row[1]] += 1
+                else:
+                    per_wins[row[1]] = 1
+                    
+                if(row[3] not in per_wins):
+                    per_wins[row[3]] = 0
+
+            # If away wins
+            else:
+                if(row[3] in per_wins):
+                    per_wins[row[3]] += 1
+                else:
+                    per_wins[row[3]] = 1
+                    
+                if(row[1] not in per_wins):
+                    per_wins[row[1]] = 0
+                           
+               
+            # Total games home and away
+            if(row[1] in games_home):
+                games_home[row[1]] += 1
+            else:
+                games_home[row[1]] = 1   
+
+            if(row[3] in games_away):
+                games_away[row[3]] += 1
+            else:
+                games_away[row[3]] = 1
+           
 
             numRow += 1
         else:
@@ -123,13 +166,17 @@ def main(argv):
         else:
             humidity[team] = round(humidity[team] / games_played[team], 2)
 
-
+    # Calculate PER.WINS
+    for team in per_wins:
+        per_wins[team] = round( (per_wins[team] / (games_home[team] + games_away[team]))*100 , 2)
 
     # READY TO OUTPUT
     # AVG.TEMP --> temps
     # AVG.HUM --> humidity
+    # PER.WINS --> per_wins
+    
 
-    #print(x)
+    print(per_wins)
 
 
     #csv_file_output.writerow()
