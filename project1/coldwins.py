@@ -23,10 +23,12 @@ def main(argv):
     headers = ["team", "AVG.TEMP", "AVG.HUM" ]
 
 
-    # games_played structure {team: numGames}
-    # temps structure {team: sumHomeTemps}
+    # games_played --> {team: numGames}
+    # temps --> {team: sumHomeTemps}
+    # humidity --> {team: sumHomeHumidity} 
     games_played = {}
     temps = {}
+    humidity = {}
 
 
 
@@ -40,6 +42,7 @@ def main(argv):
     # team = row[1]
     # temp = row[5]
     # windchill = row[6]
+    # humidity = row[7]
     # total = 1-267
 
     for row in csv_file_input:
@@ -56,16 +59,35 @@ def main(argv):
 
                 # If windchill present, add to temps min of the two
                 if(row[6] != ''):
-                   temps[row[1]] += min(int(row[5]), int(row[6]))
+                    temps[row[1]] += min(int(row[5]), int(row[6]))
 
                 # If no windchill present, add home temp to total
                 else:
                     temps[row[1]] += int(row[5])
 
+                # Increment humidity
+                if( row[7] == '' ):
+                    humidity[row[1]] += 0
+                elif( len(row[7])  == 2 ):
+                    humidity[row[1]] += int(row[7][0])
+                else:
+                    humidity[row[1]] += int(row[7][0:2])
+
             # If team does not appear in list, initialize totals
             else:
                 games_played[row[1]] = 1
                 temps[row[1]] = int(row[5])
+
+                # Humidity length can be:
+                # 0 --> 0% humidity --> ''
+                # 2 --> x% humidity --> x%
+                # 3 --> xx% humidity --> xx%
+                if( row[7] == '' ):
+                    humidity[row[1]] = 0
+                elif( len(row[7])  == 2 ):
+                    humidity[row[1]] = int(row[7][0])
+                else:
+                    humidity[row[1]] = int(row[7][0:2])
 
             numRow += 1
         else:
@@ -77,6 +99,12 @@ def main(argv):
     else:
         temps[last_row[1]] -= int(last_row[5])
 
+    if(last_row[7] != ''):
+        if( len(last_row[7])  == 2 ):
+            humidity[last_row[1]] -= int(last_row[7][0])
+        else:
+            humidity[last_row[1]] -= int(last_row[7][0:2])
+
     # Calculate AVG.TEMP
     for team in temps:
 
@@ -86,13 +114,22 @@ def main(argv):
         else:
             temps[team] = round(temps[team] / games_played[team], 2)
 
+    # Calculate AVG.HUM
+    for team in humidity:
 
-    
+        # Don't include superbowl data in temp/humidity calculation
+        if(team == last_row[1]):
+            humidity[team] = round(humidity[team] / (games_played[team] - 1), 2)
+        else:
+            humidity[team] = round(humidity[team] / games_played[team], 2)
+
 
 
     # READY TO OUTPUT
     # AVG.TEMP --> temps
+    # AVG.HUM --> humidity
 
+    #print(x)
 
 
     #csv_file_output.writerow()
