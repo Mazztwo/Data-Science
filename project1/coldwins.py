@@ -3,6 +3,18 @@ import sys
 
 
 
+def addDecimals(num):
+
+    if( len(str(num).rsplit('.')[-1]) == 2 ):
+        return num
+    elif( len(str(num).rsplit('.')[-1]) == 1 ):
+        num = str(num) + "0"
+        return str(num)
+    elif( len(str(num).rsplit('.')[-1]) == 0 ):
+        num = str(num) + ".00"
+        return str(num)
+    else:
+        pass
 
 
 
@@ -270,14 +282,29 @@ def main(argv):
     # PER.WINS.HUM.MORE --> per_wins_hum_more
 
     # Write all results
+    csv_file_output.writerow(output_headers)
+    numWritten = 0
+
     if(len(argv) == 3):
-        csv_file_output.writerow(output_headers)
         for team in per_wins:
-            row = [team, temps[team], humidity[team], per_wins[team], per_wins_home[team], per_wins_away[team], per_wins_temp_less[team], per_wins_temp_more[team], per_wins_hum_less[team], per_wins_hum_more[team]]
+            row = [team, addDecimals(temps[team]), addDecimals(humidity[team]), per_wins[team], per_wins_home[team], per_wins_away[team], per_wins_temp_less[team], per_wins_temp_more[team], per_wins_hum_less[team], per_wins_hum_more[team]]
             csv_file_output.writerow(row)
-
-
-    #csv_file_output.writerow()
+    elif(len(argv) == 4):
+        for team in per_wins:
+            check = team.split(" ")
+            if(len(check) == 3):
+                temp = [(check[0] + " " + check[1]).lower(), check[2].lower()]
+                check = temp
+            else:
+                check[0] = check[0].lower()
+                check[1] = check[1].lower()
+            if((argv[3]).lower() in check):
+                row = [team, addDecimals(temps[team]), addDecimals(humidity[team]), per_wins[team], per_wins_home[team], per_wins_away[team], per_wins_temp_less[team], per_wins_temp_more[team], per_wins_hum_less[team], per_wins_hum_more[team]]
+                csv_file_output.writerow(row)
+                numWritten += 1
+        if(numWritten == 0):
+            print("ERROR: No records for that team/city were found. Output will be blank.") 
+            print("Please try again with different input.")
 
     # Close files at end
     csv_raw_input.close() 
@@ -285,7 +312,7 @@ def main(argv):
 
 
 
-
+    
 
 
 
