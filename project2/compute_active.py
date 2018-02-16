@@ -29,16 +29,35 @@ def main(argv):
     # Create our directed graph
     graph = nx.DiGraph()
 
+    # Create list of nodes
+    nodes = []
+
     # Read csv and create graph
     for row in csv_file_input:
-        graph.add_edge(row[0],row[1])
-    
 
+        # Add edge to graph
+        graph.add_edge(row[0],row[1])
+        node1 = int(row[0])
+        node2 = int(row[1])
+
+        # Add nodes to list of nodes
+        if(node1 not in nodes):
+            nodes.append(node1)
+        if(node2 not in nodes):
+            nodes.append(node2)
+    
+    # sort list of nodes
+    nodes = sorted(nodes)
 
     # REMOVE BEFORE TURNING IN!!!
     nx.draw(graph, with_labels=True)
     plt.show()
     ###############################
+
+    #list(edge_dfs(graph, nodes))
+
+
+    print(nodes)
 
 
     # Close files at end
