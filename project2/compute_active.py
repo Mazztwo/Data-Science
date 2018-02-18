@@ -69,13 +69,17 @@ def main(argv):
                 if (edge[1] % px == 0 and edge[1] not in visited):
                     visited.append(edge[1])
                     num_activations[nodes[i]] += 1
-            # Increment node        
-            i += 1
-            visited = []
+        # Increment node        
+        i += 1
+        # Clear visited nodes
+        visited = []
 
 
     for key in num_activations.keys():
         print(key, ",", num_activations[key])
+
+
+
  
     # Close files at end
     csv_raw_input.close() 
