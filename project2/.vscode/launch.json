@@ -12,7 +12,13 @@
             "pythonPath": "/Users/Alessio/anaconda3/bin/python3",
             "program": "${file}",
             "cwd": "${workspaceFolder}",
-            "env": {},
+            "env": {""},
+            "args": 
+            [
+                "graph.csv",
+                "1",
+                "results.csv"
+            ],
             "envFile": "${workspaceFolder}/.env",
             "debugOptions": [
                 "RedirectOutput"
