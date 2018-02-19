@@ -52,9 +52,6 @@ def main(argv):
     # sort list of nodes
     nodes = sorted(nodes)
 
-    #traversal = list(nx.edge_dfs(nx.DiGraph(edges), 1))
-    #print(traversal)
-
     for node in nodes:
         traversals.append(list(nx.edge_dfs(nx.DiGraph(edges), node)))
 
@@ -68,19 +65,13 @@ def main(argv):
         if(len(traversal) != 0):
             # Add start node to activated list
             activated.append(i + 1)
-
-            #  trace 1 !!!
-
             for edge in traversal:
-
                 if (edge[1] % px == 0): 
                     visited.append(edge[1])
-
                     # Only activate node if edge[0] is activated..
                     if(edge[0] in activated and edge[1] not in activated):
                         num_activations[nodes[i]] += 1
                         activated.append(edge[1])
-
 
         # Increment node        
         i += 1
@@ -89,12 +80,13 @@ def main(argv):
         # Clear activated nodes
         activated = []
 
+    #for key in num_activations.keys():
+    #    print(key, ",", num_activations[key])
+
 
     for key in num_activations.keys():
-        print(key, ",", num_activations[key])
 
-
-
+        csv_file_output.writerow(str(key)+str(num_activations[key]))
  
     # Close files at end
     csv_raw_input.close() 
@@ -102,6 +94,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-
-        #print(traversal)
     main(sys.argv)
