@@ -32,6 +32,7 @@ def main(argv):
     num_activations = {}
     px = int(argv[2])
     visited = []
+    activated = []
 
 
     # Read csv and create graph
@@ -65,14 +66,28 @@ def main(argv):
     i = 0
     for traversal in traversals:
         if(len(traversal) != 0):
+            # Add start node to activated list
+            activated.append(i + 1)
+
+            #  trace 1 !!!
+
             for edge in traversal:
-                if (edge[1] % px == 0 and edge[1] not in visited):
+
+                if (edge[1] % px == 0): 
                     visited.append(edge[1])
-                    num_activations[nodes[i]] += 1
+
+                    # Only activate node if edge[0] is activated..
+                    if(edge[0] in activated and edge[1] not in activated):
+                        num_activations[nodes[i]] += 1
+                        activated.append(edge[1])
+
+
         # Increment node        
         i += 1
         # Clear visited nodes
         visited = []
+        # Clear activated nodes
+        activated = []
 
 
     for key in num_activations.keys():
