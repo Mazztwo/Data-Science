@@ -1,4 +1,6 @@
-# Data Science Project 2
+# CS 1656 
+# Data Science 
+# Project 2
 # Alessio Mazzone
 
 import csv
@@ -7,10 +9,6 @@ import networkx as nx
 
 
 def main(argv):
-
-    # python3 compute_active.py graph.csv   px     results.csv
-    #                 argv[0]    argv[1]  argv[2]    argv[3]
-    #                            graph   probability
 
     # Open CSV input file in read mode
     # Open CSV output file in write mode, overwrite if already exists
@@ -80,13 +78,27 @@ def main(argv):
         # Clear activated nodes
         activated = []
 
-    #for key in num_activations.keys():
-    #    print(key, ",", num_activations[key])
+    output = []
 
-
+    # Convert dictionary to list of touples
     for key in num_activations.keys():
+        output.append((key, num_activations[key]))       
 
-        csv_file_output.writerow(str(key)+str(num_activations[key]))
+    # Sort list of touples by number of activations
+    sortedOutput = sorted(output, key=lambda tup: tup[1])[::-1]
+
+    # Sort by smallest nodeID if ties occur
+    for i in range(0, len(sortedOutput)):
+        if(i+1 < len(sortedOutput)):
+            if(sortedOutput[i][1] == sortedOutput[i+1][1]):
+                if(sortedOutput[i][0] > sortedOutput[i+1][0]):
+                    temp = sortedOutput[i]
+                    sortedOutput[i] = sortedOutput[i+1]
+                    sortedOutput[i+1] = temp
+
+    # Print to output
+    for pair in sortedOutput:
+        csv_file_output.writerow( str(pair[0]) + str(pair[1]) )
  
     # Close files at end
     csv_raw_input.close() 
