@@ -41,7 +41,24 @@ RETURN DISTINCT(m.title)
 #[Q3]
 ##########################################
 result = transaction.run("""
+MATCH (any)-[:RATED]->(m:Movie)
+WITH DISTINCT(m.title) as ttl
+MATCH (a:Actor)-[:ACTS_IN]->(mov:Movie {title: ttl })
+RETURN ttl, count(a.name)
+ORDER BY count(a.name) DESC
+LIMIT 1
+;""")
+##########################################
 
+
+
+#[Q4]
+##########################################
+result = transaction.run("""
+MATCH (a:Actor)-[:ACTS_IN]->(m:Movie)<-[:DIRECTED]-(d:Director)
+WITH a.name as actors, count(DISTINCT d.name) AS directors WHERE directors > 3
+RETURN actors, directors
+ORDER BY directors DESC
 ;""")
 ##########################################
 
