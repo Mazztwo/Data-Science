@@ -91,7 +91,10 @@ ORDER BY genres DESC
 #[Q8]
 ##########################################
 result = transaction.run("""
-
+MATCH (a:Actor)-[:ACTS_IN]->(m)<-[:DIRECTED]-(d:Director)
+RETURN DISTINCT a.name, d.name, count(m)
+ORDER BY count(m) DESC
+LIMIT 10
 ;""")
 ##########################################
 
