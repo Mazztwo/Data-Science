@@ -81,7 +81,10 @@ RETURN DISTINCT(m.genre)
 #[Q7]
 ##########################################
 result = transaction.run("""
-
+MATCH (d:Director)-[:DIRECTED]->(m:Movie)
+WITH d.name AS dcts, count(DISTINCT m.genre) AS genres WHERE genres > 2
+RETURN dcts, genres
+ORDER BY genres DESC
 ;""")
 ##########################################
 
