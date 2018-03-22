@@ -73,7 +73,8 @@ RETURN b2.name
 #[Q6]
 ##########################################
 result = transaction.run("""
-
+MATCH (bacon:Actor {name: "Kevin Bacon"})-[:ACTS_IN]->(m:Movie)
+RETURN DISTINCT(m.genre)
 ;""")
 ##########################################
 
