@@ -40,6 +40,12 @@ RETURN DISTINCT(m.title)
 ;""")
 ##########################################
 
+for record in result:
+    output.write(record['(m.title)'])
+    output.write("\n")
+
+
+
 output.write("\n### Q3 ###\n")
 #[Q3]
 ##########################################
