@@ -13,11 +13,7 @@ transaction = session.begin_transaction()
 # Open output file
 output = open("output.txt", "w+")
 
-# TO WRITE
-
-
 output.write("### Q1 ###\n")
-output.write("\n")
 #[Q1]
 ##########################################
 result = transaction.run("""
@@ -28,11 +24,14 @@ LIMIT 20
 ;""")
 ##########################################
 
-#for record in result:
-#  print (record['people.name'])
+for record in result:
+    output.write(record['d.name'])
+    output.write(", ")
+    output.write(str(record['count(m)']))
+    output.write("\n")
 
-output.write("### Q2 ###\n")
-output.write("\n")
+output.write("\n### Q2 ###\n")
+
 #[Q2]
 ##########################################
 result = transaction.run("""
@@ -41,8 +40,7 @@ RETURN DISTINCT(m.title)
 ;""")
 ##########################################
 
-output.write("### Q3 ###\n")
-output.write("\n")
+output.write("\n### Q3 ###\n")
 #[Q3]
 ##########################################
 result = transaction.run("""
@@ -56,8 +54,7 @@ LIMIT 1
 ##########################################
 
 
-output.write("### Q4 ###\n")
-output.write("\n")
+output.write("\n### Q4 ###\n")
 #[Q4]
 ##########################################
 result = transaction.run("""
@@ -70,8 +67,7 @@ ORDER BY directors DESC
 
 
 
-output.write("### Q5 ###\n")
-output.write("\n")
+output.write("\n### Q5 ###\n")
 #[Q5]
 ##########################################
 result = transaction.run("""
@@ -80,8 +76,7 @@ RETURN b2.name
 ;""")
 ##########################################
 
-output.write("### Q6 ###\n")
-output.write("\n")
+output.write("\n### Q6 ###\n")
 #[Q6]
 ##########################################
 result = transaction.run("""
@@ -91,8 +86,7 @@ RETURN DISTINCT(m.genre)
 ##########################################
 
 
-output.write("### Q7 ###\n")
-output.write("\n")
+output.write("\n### Q7 ###\n")
 #[Q7]
 ##########################################
 result = transaction.run("""
@@ -104,8 +98,7 @@ ORDER BY genres DESC
 ##########################################
 
 
-output.write("### Q8 ###\n")
-output.write("\n")
+output.write("\n### Q8 ###\n")
 #[Q8]
 ##########################################
 result = transaction.run("""

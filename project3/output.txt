@@ -1,0 +1,35 @@
+### Q1 ###
+Woody Allen, 35
+Alfred Hitchcock, 32
+Steven Spielberg, 27
+Russ Meyer, 26
+Jan Svankmajer, 24
+Martin Scorsese, 24
+Clint Eastwood, 23
+Harald Reinl, 22
+François Truffaut, 21
+Claude Chabrol, 21
+Ron Howard, 20
+John Huston, 20
+Brian De Palma, 18
+Steven Soderbergh, 18
+Ingo J. Biermann, 18
+Ridley Scott, 17
+Roman Polanski, 17
+John Carpenter, 17
+Francis Ford Coppola, 17
+Michael Curtiz, 16
+
+### Q2 ###
+
+### Q3 ###
+
+### Q4 ###
+
+### Q5 ###
+
+### Q6 ###
+
+### Q7 ###
+
+### Q8 ###
