@@ -107,6 +107,10 @@ RETURN DISTINCT(m.genre)
 ;""")
 ##########################################
 
+for record in result:
+    output.write(record['(m.genre)'])
+    output.write("\n")
+
 
 output.write("\n### Q7 ###\n")
 #[Q7]
