@@ -134,12 +134,19 @@ output.write("\n### Q8 ###\n")
 ##########################################
 result = transaction.run("""
 MATCH (a:Actor)-[:ACTS_IN]->(m)<-[:DIRECTED]-(d:Director)
-RETURN DISTINCT a.name, d.name, count(m)
+RETURN  d.name, a.name, count(m)
 ORDER BY count(m) DESC
 LIMIT 10
 ;""")
 ##########################################
 
+for record in result:
+    output.write(record['d.name'])
+    output.write(", ")
+    output.write(record['a.name'])
+    output.write(", ")
+    output.write(str(record['count(m)']))
+    output.write("\n")
 
 transaction.close()
 session.close()

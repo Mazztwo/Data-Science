@@ -33978,3 +33978,13 @@ Chris Columbus, 3
 Sean Penn, 3
 
 ### Q8 ###
+Woody Allen, Woody Allen, 25
+Clint Eastwood, Clint Eastwood, 18
+Frank R. Strayer, Larry Simms, 14
+Frank R. Strayer, Arthur Lake, 14
+Frank R. Strayer, Danny Mummert, 14
+Frank R. Strayer, Daisy, 14
+Frank R. Strayer, Penny Singleton, 14
+Frank R. Strayer, Jonathan Hale, 12
+Erik Balling, Morten Grunwald, 11
+Erik Balling, Ove Sprogøe, 11
