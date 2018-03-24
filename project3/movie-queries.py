@@ -85,8 +85,6 @@ for record in result:
     output.write("\n")
 
 
-
-
 output.write("\n### Q5 ###\n")
 #[Q5]
 ##########################################
@@ -95,6 +93,10 @@ MATCH (bacon:Actor {name: "Kevin Bacon"})-[:ACTS_IN]->(m)<-[:ACTS_IN]-(b1:Actor)
 RETURN b2.name
 ;""")
 ##########################################
+for record in result:
+    output.write(record['b2.name'])
+    output.write("\n")
+
 
 output.write("\n### Q6 ###\n")
 #[Q6]
