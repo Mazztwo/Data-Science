@@ -32,7 +32,7 @@ for record in result:
 
 output.write("\n### Q2 ###\n")
 
-#[Q2]
+#[Q2] 
 ##########################################
 result = transaction.run("""
 MATCH (any)-[:RATED]->(m:Movie)
@@ -58,6 +58,13 @@ ORDER BY count(a.name) DESC
 LIMIT 1
 ;""")
 ##########################################
+
+for record in result:
+    output.write(record['ttl'])
+    output.write(", ")
+    output.write(str(record['count(a.name)']))
+    output.write("\n")
+
 
 
 output.write("\n### Q4 ###\n")
