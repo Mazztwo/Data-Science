@@ -123,6 +123,11 @@ ORDER BY genres DESC
 ;""")
 ##########################################
 
+for record in result:
+    output.write(record['dcts'])
+    output.write(", ")
+    output.write(str(record['genres']))
+    output.write("\n")
 
 output.write("\n### Q8 ###\n")
 #[Q8]
