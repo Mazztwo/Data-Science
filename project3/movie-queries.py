@@ -72,11 +72,18 @@ output.write("\n### Q4 ###\n")
 ##########################################
 result = transaction.run("""
 MATCH (a:Actor)-[:ACTS_IN]->(m:Movie)<-[:DIRECTED]-(d:Director)
-WITH a.name as actors, count(DISTINCT d.name) AS directors WHERE directors > 3
+WITH a.name as actors, count(DISTINCT d.name) AS directors WHERE directors > 2
 RETURN actors, directors
 ORDER BY directors DESC
 ;""")
 ##########################################
+
+for record in result:
+    output.write(record['actors'])
+    output.write(", ")
+    output.write(str(record['directors']))
+    output.write("\n")
+
 
 
 
