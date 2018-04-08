@@ -4,6 +4,7 @@
 
 
 import sqlite3 as lite
+import pandas
 import csv
 import re
 con = lite.connect('cs1656.sqlite')
@@ -36,10 +37,21 @@ with con:
 	########################################################################		
 	# actors.csv, cast.csv, directors.csv, movie_dir.csv, movies.csv
 	# UPDATE THIS
+	
+	df1 = pandas.read_csv('actors.csv', header=None)
+	df1.to_sql('Actors', con, if_exists='append', index=False)
 
+	df2 = pandas.read_csv('cast.csv', header=None)
+	df2.to_sql('Cast', con, if_exists='append', index=False)
 
+	df3 = pandas.read_csv('directors.csv', header=None)
+	df3.to_sql('Directors', con, if_exists='append', index=False)
 
+	df4 = pandas.read_csv('movie_dir.csv', header=None)
+	df4.to_sql('Movie_Director', con, if_exists='append', index=False)
 
+	df5 = pandas.read_csv('movies.csv', header=None)
+	df5.to_sql('Movies', con, if_exists='append', index=False)
 
 
 
@@ -101,12 +113,14 @@ SELECT * FROM Movie_Director
 	# q02.csv, ..., q12.csv
 
 	# Q01 ########################		
-	queries['q01'] = '''
-'''	
+	queries['q01'] = 
+	'''
+	'''	
 	
 	# Q02 ########################		
-	queries['q02'] = '''
-'''	
+	queries['q02'] = 
+	'''
+	'''	
 
 	# Q03 ########################		
 	queries['q03'] = '''
