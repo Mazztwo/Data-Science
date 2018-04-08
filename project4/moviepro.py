@@ -127,9 +127,27 @@ SELECT * FROM Movie_Director
 	# We will grade your program based on the output files q01.csv, 
 	# q02.csv, ..., q12.csv
 
+# Actors (aid, fname, lname, gender)
+# Movies (mid, title, year, rank)
+# Cast (aid, mid, role)
+# Directors (did, fname, lname)
+# Movie_Director (did, mid)
+
+
+# List all the actors (first and last name) who acted in at least one film in the 80s (1980-1990, both ends inclusive) and in at least one film in the 21st century (>=2000).
+
+
 	# Q01 ########################		
-	queries['q01'] = '''
-	'''	
+	queries['q01'] ='''
+SELECT Actors.fname, Actors.lname
+FROM Actors
+JOIN Cast AS cast1 ON cast1.aid = Actors.aid
+JOIN Cast AS cast2 ON cast2.aid = Actors.aid
+JOIN Movies AS movie1 ON movie1.mid = cast1.mid
+JOIN Movies As movie2 ON movie2.mid = cast2.mid
+WHERE movie1.year BETWEEN 1980 AND 1990 AND movie2.year >= 2000
+GROUP BY Actors.fname, Actors.lname
+'''
 	
 	# Q02 ########################		
 	queries['q02'] = '''
