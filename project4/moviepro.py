@@ -4,7 +4,7 @@
 
 
 import sqlite3 as lite
-import pandas
+#import pandas
 import csv
 import re
 con = lite.connect('cs1656.sqlite')
@@ -38,39 +38,54 @@ with con:
 	# actors.csv, cast.csv, directors.csv, movie_dir.csv, movies.csv
 	# UPDATE THIS
 	
-	df1 = pandas.read_csv('actors.csv', header=None)
-	df1.to_sql('Actors', con, if_exists='append', index=False)
+	#df1 = pandas.read_csv('actors.csv', header=None)
+	#df2 = pandas.read_csv('cast.csv', header=None)
+	#df3 = pandas.read_csv('directors.csv', header=None)
+	#df4 = pandas.read_csv('movie_dir.csv', header=None)
+	#df5 = pandas.read_csv('movies.csv', header=None)
 
-	df2 = pandas.read_csv('cast.csv', header=None)
-	df2.to_sql('Cast', con, if_exists='append', index=False)
+	with open('actors.csv', newline='') as rawfile:
+		data = csv.reader(rawfile, delimiter=',', quotechar='|')
+		for row in data:
+			cur.execute("INSERT INTO Actors VALUES(" + row[0] + ", '" + row[1]+ "', '" + row[2] + "', '" + row[3] + "')")
 
-	df3 = pandas.read_csv('directors.csv', header=None)
-	df3.to_sql('Directors', con, if_exists='append', index=False)
+	with open('cast.csv', newline='') as rawfile:
+		data = csv.reader(rawfile, delimiter=',', quotechar='|')
+		for row in data:
+			cur.execute("INSERT INTO Cast VALUES(" + row[0] + ", " + row[1] + ", '" + row[2] + "')")
 
-	df4 = pandas.read_csv('movie_dir.csv', header=None)
-	df4.to_sql('Movie_Director', con, if_exists='append', index=False)
+	with open('directors.csv', newline='') as rawfile:
+		data = csv.reader(rawfile, delimiter=',', quotechar='|')
+		for row in data:	
+			cur.execute("INSERT INTO Directors VALUES(" + row[0] + ", '" + row[1] + "', '" + row[2] + "')")		
 
-	df5 = pandas.read_csv('movies.csv', header=None)
-	df5.to_sql('Movies', con, if_exists='append', index=False)
+	with open('movie_dir.csv', newline='') as rawfile:
+		data = csv.reader(rawfile, delimiter=',', quotechar='|')
+		for row in data:
+			cur.execute("INSERT INTO Movie_Director VALUES(" + row[0] + ", " + row[1] + ")")
 
+	with open('movies.csv', newline='') as rawfile:
+		data = csv.reader(rawfile, delimiter=',', quotechar='|')
+		for row in data:
+			cur.execute("INSERT INTO Movies VALUES(" + row[0] + ", '" + row[1] + "', " + row[2] + ", " + row[3] + ")")
 
 
 	########################################################################		
 	### INSERT DATA INTO DATABASE ##########################################
 	########################################################################		
 	# UPDATE THIS TO WORK WITH DATA READ IN FROM CSV FILES
-	cur.execute("INSERT INTO Actors VALUES(1001, 'Harrison', 'Ford', 'Male')") 
-	cur.execute("INSERT INTO Actors VALUES(1002, 'Daisy', 'Ridley', 'Female')")   
+	#cur.execute("INSERT INTO Actors VALUES(1001, 'Harrison', 'Ford', 'Male')") 
+	#cur.execute("INSERT INTO Actors VALUES(1002, 'Daisy', 'Ridley', 'Female')")   
 
-	cur.execute("INSERT INTO Movies VALUES(101, 'Star Wars VII: The Force Awakens', 2015, 8.2)") 
-	cur.execute("INSERT INTO Movies VALUES(102, 'Rogue One: A Star Wars Story', 2016, 8.0)")
+	#cur.execute("INSERT INTO Movies VALUES(101, 'Star Wars VII: The Force Awakens', 2015, 8.2)") 
+	#cur.execute("INSERT INTO Movies VALUES(102, 'Rogue One: A Star Wars Story', 2016, 8.0)")
 	
-	cur.execute("INSERT INTO Cast VALUES(1001, 101, 'Han Solo')")  
-	cur.execute("INSERT INTO Cast VALUES(1002, 101, 'Rey')")  
+	#cur.execute("INSERT INTO Cast VALUES(1001, 101, 'Han Solo')")  
+	#cur.execute("INSERT INTO Cast VALUES(1002, 101, 'Rey')")  
 
-	cur.execute("INSERT INTO Directors VALUES(5000, 'J.J.', 'Abrams')")  
+	#cur.execute("INSERT INTO Directors VALUES(5000, 'J.J.', 'Abrams')")  
 	
-	cur.execute("INSERT INTO Movie_Director VALUES(5000, 101)")  
+	#cur.execute("INSERT INTO Movie_Director VALUES(5000, 101)")  
 
 	con.commit()
     
@@ -113,13 +128,11 @@ SELECT * FROM Movie_Director
 	# q02.csv, ..., q12.csv
 
 	# Q01 ########################		
-	queries['q01'] = 
-	'''
+	queries['q01'] = '''
 	'''	
 	
 	# Q02 ########################		
-	queries['q02'] = 
-	'''
+	queries['q02'] = '''
 	'''	
 
 	# Q03 ########################		
