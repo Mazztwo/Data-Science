@@ -127,14 +127,7 @@ SELECT * FROM Movie_Director
 	# We will grade your program based on the output files q01.csv, 
 	# q02.csv, ..., q12.csv
 
-# Actors (aid, fname, lname, gender)
-# Movies (mid, title, year, rank)
-# Cast (aid, mid, role)
-# Directors (did, fname, lname)
-# Movie_Director (did, mid)
 
-
-# List all the actors (first and last name) who acted in at least one film in the 80s (1980-1990, both ends inclusive) and in at least one film in the 21st century (>=2000).
 
 
 	# Q01 ########################		
@@ -144,14 +137,27 @@ FROM Actors
 JOIN Cast AS cast1 ON cast1.aid = Actors.aid
 JOIN Cast AS cast2 ON cast2.aid = Actors.aid
 JOIN Movies AS movie1 ON movie1.mid = cast1.mid
-JOIN Movies As movie2 ON movie2.mid = cast2.mid
+JOIN Movies AS movie2 ON movie2.mid = cast2.mid
 WHERE movie1.year BETWEEN 1980 AND 1990 AND movie2.year >= 2000
 GROUP BY Actors.fname, Actors.lname
 '''
 	
+    # Actors (aid, fname, lname, gender)
+    # Movies (mid, title, year, rank)
+    # Cast (aid, mid, role)
+    # Directors (did, fname, lname)
+    # Movie_Director (did, mid)
+    
+    
+    # List all the movies (title, year) that were released in the same year as the movie entitled "Rogue One: A Star Wars Story", but had a better rank (Note: the higher the value in the rank attribute, the better the rank of the movie).
 	# Q02 ########################		
-	queries['q02'] = '''
-	'''	
+	queries['q02'] ='''
+SELECT Movies.title, Movies.year
+FROM Movies
+JOIN Movies AS r1 ON r1.title = "Rogue One: A Star Wars Story"
+WHERE Movies.year = r1.year AND Movies.rank > r1.rank
+
+'''
 
 	# Q03 ########################		
 	queries['q03'] = '''
