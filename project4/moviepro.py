@@ -172,13 +172,6 @@ ORDER BY num DESC
 
 '''
 
-# Actors (aid, fname, lname, gender)
-# Movies (mid, title, year, rank)
-# Cast (aid, mid, role)
-# Directors (did, fname, lname)
-# Movie_Director (did, mid)
-
-
 	# Q04 ########################		
 	queries['q04'] = '''
 SELECT a.fname, a.lname
@@ -202,9 +195,26 @@ AND a.aid NOT IN
 GROUP BY a.fname, a.lname
 '''	
 
+
 	# Q05 ########################		
 	queries['q05'] = '''
+SELECT d.fname, d.lname, COUNT(*) AS num
+FROM Directors AS d
+JOIN Movie_Director AS m
+WHERE d.did = m.did
+GROUP BY d.fname, d.lname
+ORDER BY num DESC
+LIMIT 20
 '''	
+
+
+# Actors (aid, fname, lname, gender)
+# Movies (mid, title, year, rank)
+# Cast (aid, mid, role)
+# Directors (did, fname, lname)
+# Movie_Director (did, mid)
+
+
 
 	# Q06 ########################		
 	queries['q06'] = '''
