@@ -227,11 +227,42 @@ SELECT c.mid, m.title, COUNT(c.aid) AS num
         GROUP BY m.title
         ORDER BY num DESC
         LIMIT 10
-
 '''	
 
-
-
+	# Q07 ########################		
+	queries['q07'] = '''
+SELECT f.title, f.females, m.males
+FROM
+    (SELECT m.mid, m.title, count(*) AS females
+    FROM Actors AS a
+    JOIN Cast AS c ON c.aid = a.aid
+    JOIN Movies AS m ON m.mid = c.mid
+    WHERE a.gender = 'Female'
+    GROUP BY m.title) AS f
+JOIN
+    (SELECT m.mid, m.title, count(*) AS males
+    FROM Actors AS a
+    JOIN Cast AS c ON c.aid = a.aid
+    JOIN Movies AS m ON m.mid = c.mid
+    WHERE a.gender = 'Male'
+    GROUP BY m.title) AS m ON f.title = m.title
+WHERE f.females > m.males
+GROUP BY f.title
+ORDER BY f.females DESC
+'''
+    
+	# Q08 ########################		
+	queries['q08'] = '''
+SELECT a.aid, a.fname, a.lname, count(DISTINCT d.did) numDir
+FROM Actors AS a
+JOIN Cast AS c ON c.aid = a.aid
+JOIN Movies AS m ON m.mid = c.mid
+JOIN Movie_Director AS md ON md.mid = m.mid
+JOIN Directors AS d ON d.did = md.did
+WHERE a.fname != d.fname AND a.lname != d.lname
+GROUP BY a.fname, a.lname
+ORDER BY numDir DESC
+'''	
 
 
 # Actors (aid, fname, lname, gender)
@@ -241,40 +272,20 @@ SELECT c.mid, m.title, COUNT(c.aid) AS num
 # Movie_Director (did, mid)
 
 
-#Find the movie(s) whose cast has more actresses than actors (i.e., gender=female vs gender=male). Show the title, the number of actresses, and the number of actors in the results.
-
-
-
-
-	# Q07 ########################		
-	queries['q07'] = '''
-SELECT f.title, f.females, m.males
-FROM
-(SELECT m.mid, m.title, count(*) AS females
-FROM Actors AS a
-JOIN Cast AS c ON c.aid = a.aid
-JOIN Movies AS m ON m.mid = c.mid
-WHERE a.gender = 'Female'
-GROUP BY m.title) AS f
-JOIN
-(SELECT m.mid, m.title, count(*) AS males
-FROM Actors AS a
-JOIN Cast AS c ON c.aid = a.aid
-JOIN Movies AS m ON m.mid = c.mid
-WHERE a.gender = 'Male'
-GROUP BY m.title) AS m ON f.title = m.title
-WHERE f.females > m.males
-GROUP BY f.title
-ORDER BY f.females DESC
-'''	
-
-	# Q08 ########################		
-	queries['q08'] = '''
-'''	
-
 	# Q09 ########################		
 	queries['q09'] = '''
 '''	
+
+
+
+
+
+
+
+
+
+
+
 
 	# Q10 ########################		
 	queries['q10'] = '''
