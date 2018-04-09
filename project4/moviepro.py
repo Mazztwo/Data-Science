@@ -160,7 +160,7 @@ WHERE Movies.year = r1.year AND Movies.rank > r1.rank
 
 	# Q03 ########################		
 	queries['q03'] = '''
-SELECT a.fname, a.lname, count(*) as num
+SELECT a.fname, a.lname, count(*) AS num
 FROM Actors AS a
 JOIN Cast AS c
     ON c.aid = a.aid
@@ -178,8 +178,28 @@ ORDER BY num DESC
 # Directors (did, fname, lname)
 # Movie_Director (did, mid)
 
+
 	# Q04 ########################		
 	queries['q04'] = '''
+SELECT a.fname, a.lname
+FROM Actors AS a
+WHERE a.aid IN
+    (SELECT a.aid
+     FROM Actors AS a
+     JOIN Cast AS c ON c.aid = a.aid
+     WHERE c.mid IN
+        (SELECT Movies.mid
+         FROM Movies
+         WHERE Movies.year < 1985))
+AND a.aid NOT IN
+    (SELECT a.aid
+     FROM Actors AS a
+     JOIN Cast AS c ON c.aid = a.aid
+     WHERE c.mid IN
+        (SELECT Movies.mid
+         FROM Movies
+         WHERE Movies.year >= 1985))
+GROUP BY a.fname, a.lname
 '''	
 
 	# Q05 ########################		
