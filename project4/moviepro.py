@@ -276,14 +276,20 @@ ORDER BY numDir DESC
 
 	# Q09 ########################		
 	queries['q09'] = '''
-SELECT sa.fname, sa.lname, MIN(m.year)
+SELECT x.fname, x.lname, x.cnt
 FROM
-    (SELECT a.aid, a.fname, a.lname
-    FROM Actors AS a
-    WHERE a.fname LIKE 'S%') AS sa
-JOIN Cast AS c ON c.aid = sa.aid
-JOIN Movies AS m ON m.mid = c.mid
-GROUP BY sa.fname
+    (SELECT j.fname, j.lname, j.cnt, MIN(j.year) AS debut
+    FROM
+            (SELECT sa.aid, sa.fname, sa.lname, count(*) AS cnt, m.year
+            FROM
+                 (SELECT a.aid, a.fname, a.lname
+                  FROM Actors AS a
+                  WHERE a.fname LIKE 'S%') AS sa
+            JOIN Cast AS c ON c.aid = sa.aid
+            JOIN Movies AS m ON m.mid = c.mid
+            GROUP BY m.year) AS j
+    GROUP BY j.aid) AS x
+ORDER BY x.cnt DESC
 '''
 
 
