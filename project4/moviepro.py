@@ -221,11 +221,11 @@ LIMIT 20
 	# Q06 ########################		
 	queries['q06'] = '''
 SELECT c.mid, m.title, COUNT(c.aid) AS num
-        FROM Movies AS m
-        JOIN Cast AS c ON m.mid = c.mid
-        GROUP BY m.title
-        ORDER BY num DESC
-        LIMIT 10
+FROM Movies AS m
+JOIN Cast AS c ON m.mid = c.mid
+GROUP BY m.title
+ORDER BY num DESC
+LIMIT 10
 '''	
 
 	# Q07 ########################		
@@ -271,9 +271,20 @@ ORDER BY numDir DESC
 # Movie_Director (did, mid)
 
 
+#For all actors whose first name starts with an S, count the movies that he/she appeared in his/her debut year (i.e., year of their first movie). Show the actor's first and last name, plus the count. Sort by decreasing order of the count.
+
+
 	# Q09 ########################		
 	queries['q09'] = '''
-'''	
+SELECT sa.fname, sa.lname, MIN(m.year)
+FROM
+    (SELECT a.aid, a.fname, a.lname
+    FROM Actors AS a
+    WHERE a.fname LIKE 'S%') AS sa
+JOIN Cast AS c ON c.aid = sa.aid
+JOIN Movies AS m ON m.mid = c.mid
+GROUP BY sa.fname
+'''
 
 
 
