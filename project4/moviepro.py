@@ -230,8 +230,42 @@ SELECT c.mid, m.title, COUNT(c.aid) AS num
 
 '''	
 
+
+
+
+
+# Actors (aid, fname, lname, gender)
+# Movies (mid, title, year, rank)
+# Cast (aid, mid, role)
+# Directors (did, fname, lname)
+# Movie_Director (did, mid)
+
+
+#Find the movie(s) whose cast has more actresses than actors (i.e., gender=female vs gender=male). Show the title, the number of actresses, and the number of actors in the results.
+
+
+
+
 	# Q07 ########################		
 	queries['q07'] = '''
+SELECT f.title, f.females, m.males
+FROM
+(SELECT m.mid, m.title, count(*) AS females
+FROM Actors AS a
+JOIN Cast AS c ON c.aid = a.aid
+JOIN Movies AS m ON m.mid = c.mid
+WHERE a.gender = 'Female'
+GROUP BY m.title) AS f
+JOIN
+(SELECT m.mid, m.title, count(*) AS males
+FROM Actors AS a
+JOIN Cast AS c ON c.aid = a.aid
+JOIN Movies AS m ON m.mid = c.mid
+WHERE a.gender = 'Male'
+GROUP BY m.title) AS m ON f.title = m.title
+WHERE f.females > m.males
+GROUP BY f.title
+ORDER BY f.females DESC
 '''	
 
 	# Q08 ########################		
