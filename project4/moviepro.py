@@ -127,9 +127,6 @@ SELECT * FROM Movie_Director
 	# We will grade your program based on the output files q01.csv, 
 	# q02.csv, ..., q12.csv
 
-
-
-
 	# Q01 ########################		
 	queries['q01'] ='''
 SELECT Actors.fname, Actors.lname
@@ -146,8 +143,7 @@ WHERE movie1.year BETWEEN 1980 AND 1990
     AND movie2.year >= 2000
 GROUP BY Actors.fname, Actors.lname
 '''
-	
-  
+    
 	# Q02 ########################		
 	queries['q02'] ='''
 SELECT Movies.title, Movies.year
@@ -156,8 +152,7 @@ JOIN Movies AS r1
     ON r1.title = "Rogue One: A Star Wars Story"
 WHERE Movies.year = r1.year AND Movies.rank > r1.rank
 '''
-
-
+    
 	# Q03 ########################		
 	queries['q03'] = '''
 SELECT a.fname, a.lname, count(*) AS num
@@ -195,7 +190,6 @@ AND a.aid NOT IN
 GROUP BY a.fname, a.lname
 '''	
 
-
 	# Q05 ########################		
 	queries['q05'] = '''
 SELECT d.fname, d.lname, COUNT(*) AS num
@@ -214,10 +208,26 @@ LIMIT 20
 # Directors (did, fname, lname)
 # Movie_Director (did, mid)
 
+# Find the top 10 movies with the largest cast (title, number of cast members) in decreasing order. Note: show all movies in case of a tie.
 
+#SELECT m.title, COUNT(c.aid) AS num
+#FROM Movies AS m
+#JOIN Cast AS c ON m.mid = c.mid
+#GROUP BY m.title
+#ORDER BY num DESC
+#LIMIT 10
+
+#DOES NOT SHOW TIES!!!
 
 	# Q06 ########################		
 	queries['q06'] = '''
+SELECT c.mid, m.title, COUNT(c.aid) AS num
+        FROM Movies AS m
+        JOIN Cast AS c ON m.mid = c.mid
+        GROUP BY m.title
+        ORDER BY num DESC
+        LIMIT 10
+
 '''	
 
 	# Q07 ########################		
