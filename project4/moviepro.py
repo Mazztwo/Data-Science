@@ -261,19 +261,8 @@ JOIN Directors AS d ON d.did = md.did
 WHERE a.fname != d.fname AND a.lname != d.lname
 GROUP BY a.fname, a.lname
 ORDER BY numDir DESC
-'''	
-
-
-# Actors (aid, fname, lname, gender)
-# Movies (mid, title, year, rank)
-# Cast (aid, mid, role)
-# Directors (did, fname, lname)
-# Movie_Director (did, mid)
-
-
-#For all actors whose first name starts with an S, count the movies that he/she appeared in his/her debut year (i.e., year of their first movie). Show the actor's first and last name, plus the count. Sort by decreasing order of the count.
-
-
+'''
+    
 	# Q09 ########################		
 	queries['q09'] = '''
 SELECT x.fname, x.lname, x.cnt
@@ -292,20 +281,24 @@ FROM
 ORDER BY x.cnt DESC
 '''
 
-
-
-
-
-
-
-
-
-
-
-
 	# Q10 ########################		
 	queries['q10'] = '''
+SELECT d.lname, m.title
+FROM Actors AS a
+JOIN Cast AS c ON a.aid = c.aid
+JOIN Movies AS m ON m.mid = c.mid
+JOIN Movie_Director AS md ON md.mid = c.mid
+JOIN Directors AS d ON d.did = md.did
+WHERE d.lname = a.lname AND d.fname != a.fname
+ORDER BY a.lname ASC
 '''	
+
+# Actors (aid, fname, lname, gender)
+# Movies (mid, title, year, rank)
+# Cast (aid, mid, role)
+# Directors (did, fname, lname)
+# Movie_Director (did, mid)
+
 
 	# Q11 ########################		
 	queries['q11'] = '''
