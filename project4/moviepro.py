@@ -155,7 +155,7 @@ WHERE Movies.year = r1.year AND Movies.rank > r1.rank
     
 	# Q03 ########################		
 	queries['q03'] = '''
-SELECT a.fname, a.lname, count(*) AS num
+SELECT a.fname, a.lname, count(DISTINCT m.mid) AS num
 FROM Actors AS a
 JOIN Cast AS c
     ON c.aid = a.aid
@@ -164,7 +164,6 @@ JOIN Movies AS m
 WHERE m.title LIKE '%Star Wars%'
 GROUP BY a.fname, a.lname
 ORDER BY num DESC
-
 '''
 
 	# Q04 ########################		
