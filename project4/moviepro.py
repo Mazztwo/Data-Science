@@ -320,7 +320,7 @@ GROUP BY a2.fname, a2.lname
 	# Q12 ########################
     # Assume that the popularity of an actor is reflected by the average rank of all the movies he/she has acted in. Find the top 20 most popular actors (in descreasing order of popularity) -- list the actor's first/last name, the total number of movies he/she has acted, and his/her popularity score. For simplicity, feel free to ignore ties at the number 20 spot (i.e., always show up to 20 only).
 	queries['q12'] = '''
-SELECT a.fname, a.lname, COUNT(m.mid), AVG(m.rank) AS popularity
+SELECT a.fname, a.lname, COUNT(DISTINCT m.mid), AVG(m.rank) AS popularity
 FROM Actors AS a
 JOIN Cast AS c ON a.aid = c.aid
 JOIN Movies AS m ON m.mid = c.mid
