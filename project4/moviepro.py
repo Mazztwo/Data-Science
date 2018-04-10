@@ -205,35 +205,28 @@ WHERE d.did = m.did
 GROUP BY d.fname, d.lname
 ORDER BY num DESC
 LIMIT 20
-'''	
-
-
-# Actors (aid, fname, lname, gender)
-# Movies (mid, title, year, rank)
-# Cast (aid, mid, role)
-# Directors (did, fname, lname)
-# Movie_Director (did, mid)
-
-# Find the top 10 movies with the largest cast (title, number of cast members) in decreasing order. Note: show all movies in case of a tie.
-
-#SELECT m.title, COUNT(c.aid) AS num
-#FROM Movies AS m
-#JOIN Cast AS c ON m.mid = c.mid
-#GROUP BY m.title
-#ORDER BY num DESC
-#LIMIT 10
-
-#DOES NOT SHOW TIES!!!
-
+'''
+    
 	# Q06 ########################
     # Find the top 10 movies with the largest cast (title, number of cast members) in decreasing order. Note: show all movies in case of a tie.
 	queries['q06'] = '''
-SELECT c.mid, m.title, COUNT(c.aid) AS num
-FROM Movies AS m
-JOIN Cast AS c ON m.mid = c.mid
-GROUP BY m.title
-ORDER BY num DESC
-LIMIT 10
+SELECT allcast.title, allcast.castnum
+FROM
+    (SELECT c.mid, m.title, COUNT(c.aid) AS castnum
+    FROM Movies AS m
+    JOIN Cast AS c ON m.mid = c.mid
+    GROUP BY m.title
+    ORDER BY castnum DESC) AS allcast
+JOIN
+    (SELECT c.mid, m.title, COUNT(c.aid) AS num
+    FROM Movies AS m
+    JOIN Cast AS c ON m.mid = c.mid
+    GROUP BY m.title
+    ORDER BY num DESC
+    LIMIT 10) AS topten ON topten.num = allcast.castnum
+GROUP BY allcast.title
+ORDER BY allcast.castnum DESC
+
 '''	
 
 	# Q07 ########################
