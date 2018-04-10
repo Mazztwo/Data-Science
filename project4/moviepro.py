@@ -301,21 +301,21 @@ ORDER BY a.lname ASC
 	# Q11 ########################
     # The Bacon number of an actor is the length of the shortest path between the actor and Kevin Bacon in the "co-acting" graph. That is, Kevin Bacon has Bacon number 0; all actors who acted in the same movie as him have Bacon number 1; all actors who acted in the same film as some actor with Bacon number 1 have Bacon number 2, etc. List all actors whose Bacon number is 2 (first name, last name). You can familiarize yourself with the concept, by visiting The Oracle of Bacon.
 	queries['q11'] = '''
-        SELECT a2.fname, a2.lname
-        FROM
-            (SELECT m.mid
-            FROM Actors AS a
-            JOIN Cast AS c On a.aid = c.aid
-            JOIN Movies AS m ON m.mid = c.mid
-            WHERE a.fname = 'Kevin' AND a.lname = 'Bacon') AS baconMovies
-        JOIN Cast AS c1 ON c1.mid = baconMovies.mid
-        JOIN Actors AS a1 ON a1.aid = c1.aid
-        JOIN Cast AS co ON co.aid = a1.aid
-        JOIN Movies AS m1 ON m1.mid = co.mid
-        JOIN Cast AS coco ON coco.mid = m1.mid
-        JOIN Actors AS a2 ON a2.aid = coco.aid
-        WHERE coco.mid != baconMovies.mid AND a1.aid != coco.aid AND a1.fname != "Kevin" AND a1.lname != "Bacon"
-        GROUP BY a2.fname, a2.lname
+SELECT a2.fname, a2.lname
+FROM
+    (SELECT m.mid
+    FROM Actors AS a
+    JOIN Cast AS c On a.aid = c.aid
+    JOIN Movies AS m ON m.mid = c.mid
+    WHERE a.fname = 'Kevin' AND a.lname = 'Bacon') AS baconMovies
+JOIN Cast AS c1 ON c1.mid = baconMovies.mid
+JOIN Actors AS a1 ON a1.aid = c1.aid
+JOIN Cast AS co ON co.aid = a1.aid
+JOIN Movies AS m1 ON m1.mid = co.mid
+JOIN Cast AS coco ON coco.mid = m1.mid
+JOIN Actors AS a2 ON a2.aid = coco.aid
+WHERE coco.mid != baconMovies.mid AND a1.aid != coco.aid AND a1.fname != "Kevin" AND a1.lname != "Bacon"
+GROUP BY a2.fname, a2.lname
 '''
 	# Q12 ########################
     # Assume that the popularity of an actor is reflected by the average rank of all the movies he/she has acted in. Find the top 20 most popular actors (in descreasing order of popularity) -- list the actor's first/last name, the total number of movies he/she has acted, and his/her popularity score. For simplicity, feel free to ignore ties at the number 20 spot (i.e., always show up to 20 only).
