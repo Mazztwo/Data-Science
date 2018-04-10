@@ -127,7 +127,9 @@ SELECT * FROM Movie_Director
 	# We will grade your program based on the output files q01.csv, 
 	# q02.csv, ..., q12.csv
 
-	# Q01 ########################		
+
+	# Q01 ########################
+    # List all the actors (first and last name) who acted in at least one film in the 80s (1980-1990, both ends inclusive) and in at least one film in the 21st century (>=2000).
 	queries['q01'] ='''
 SELECT Actors.fname, Actors.lname
 FROM Actors
@@ -143,8 +145,10 @@ WHERE movie1.year BETWEEN 1980 AND 1990
     AND movie2.year >= 2000
 GROUP BY Actors.fname, Actors.lname
 '''
-    
-	# Q02 ########################		
+
+
+	# Q02 ########################
+    # List all the movies (title, year) that were released in the same year as the movie entitled "Rogue One: A Star Wars Story", but had a better rank (Note: the higher the value in the rank attribute, the better the rank of the movie).
 	queries['q02'] ='''
 SELECT Movies.title, Movies.year
 FROM Movies
@@ -153,7 +157,8 @@ JOIN Movies AS r1
 WHERE Movies.year = r1.year AND Movies.rank > r1.rank
 '''
     
-	# Q03 ########################		
+	# Q03 ########################
+    # List all the actors (first and last name) who played in a Star Wars movie (i.e., title like '%Star Wars%') in decreasing order of how many Star Wars movies they appeared in. If an actor plays multiple roles in the same movie, count that still as one movie.
 	queries['q03'] = '''
 SELECT a.fname, a.lname, count(DISTINCT m.mid) AS num
 FROM Actors AS a
@@ -166,7 +171,8 @@ GROUP BY a.fname, a.lname
 ORDER BY num DESC
 '''
 
-	# Q04 ########################		
+	# Q04 ########################
+    # Find the actor(s) (first and last name) who only acted in films released before 1985.
 	queries['q04'] = '''
 SELECT a.fname, a.lname
 FROM Actors AS a
@@ -189,7 +195,8 @@ AND a.aid NOT IN
 GROUP BY a.fname, a.lname
 '''	
 
-	# Q05 ########################		
+	# Q05 ########################
+    #  List the top 20 directors in descending order of the number of films they directed (first name, last name, number of films directed). For simplicity, feel free to ignore ties at the number 20 spot (i.e., always show up to 20 only).
 	queries['q05'] = '''
 SELECT d.fname, d.lname, COUNT(*) AS num
 FROM Directors AS d
@@ -218,7 +225,8 @@ LIMIT 20
 
 #DOES NOT SHOW TIES!!!
 
-	# Q06 ########################		
+	# Q06 ########################
+    # Find the top 10 movies with the largest cast (title, number of cast members) in decreasing order. Note: show all movies in case of a tie.
 	queries['q06'] = '''
 SELECT c.mid, m.title, COUNT(c.aid) AS num
 FROM Movies AS m
@@ -228,7 +236,8 @@ ORDER BY num DESC
 LIMIT 10
 '''	
 
-	# Q07 ########################		
+	# Q07 ########################
+    # Find the movie(s) whose cast has more actresses than actors (i.e., gender=female vs gender=male). Show the title, the number of actresses, and the number of actors in the results.
 	queries['q07'] = '''
 SELECT f.title, f.females, m.males
 FROM
@@ -250,7 +259,8 @@ GROUP BY f.title
 ORDER BY f.females DESC
 '''
     
-	# Q08 ########################		
+	# Q08 ########################
+    # Find all the actors who have worked with at least 7 different directors. Do not consider cases of self-directing (i.e., when the director is also an actor in a movie), but count all directors in a movie towards the threshold of 7 directors. Show the actor's first, last name, and the number of directors he/she has worked with. Sort in decreasing order of number of directors.
 	queries['q08'] = '''
 SELECT a.aid, a.fname, a.lname, count(DISTINCT d.did) numDir
 FROM Actors AS a
@@ -263,7 +273,8 @@ GROUP BY a.fname, a.lname
 ORDER BY numDir DESC
 '''
     
-	# Q09 ########################		
+	# Q09 ########################
+    # For all actors whose first name starts with an S, count the movies that he/she appeared in his/her debut year (i.e., year of their first movie). Show the actor's first and last name, plus the count. Sort by decreasing order of the count.
 	queries['q09'] = '''
 SELECT x.fname, x.lname, x.cnt
 FROM
@@ -281,7 +292,8 @@ FROM
 ORDER BY x.cnt DESC
 '''
 
-	# Q10 ########################		
+	# Q10 ########################
+    # Find instances of nepotism between actors and directors, i.e., an actor in a movie and the director having the same last name, but a different first name. Show the last name and the title of the movie, sorted alphabetically by last name.
 	queries['q10'] = '''
 SELECT d.lname, m.title
 FROM Actors AS a
@@ -300,11 +312,28 @@ ORDER BY a.lname ASC
 # Movie_Director (did, mid)
 
 
-	# Q11 ########################		
+	# Q11 ########################
+    # The Bacon number of an actor is the length of the shortest path between the actor and Kevin Bacon in the "co-acting" graph. That is, Kevin Bacon has Bacon number 0; all actors who acted in the same movie as him have Bacon number 1; all actors who acted in the same film as some actor with Bacon number 1 have Bacon number 2, etc. List all actors whose Bacon number is 2 (first name, last name). You can familiarize yourself with the concept, by visiting The Oracle of Bacon.
 	queries['q11'] = '''
+        SELECT a2.fname, a2.lname
+        FROM
+            (SELECT m.mid
+            FROM Actors AS a
+            JOIN Cast AS c On a.aid = c.aid
+            JOIN Movies AS m ON m.mid = c.mid
+            WHERE a.fname = 'Kevin' AND a.lname = 'Bacon') AS baconMovies
+        JOIN Cast AS c1 ON c1.mid = baconMovies.mid
+        JOIN Actors AS a1 ON a1.aid = c1.aid
+        JOIN Cast AS c2 ON c2.aid = a1.aid
+        JOIN Movies AS m1 ON m1.mid = c2.mid
+        JOIN Cast AS c3 ON c3.mid = m1.mid
+        JOIN Actors AS a2 ON a2.aid = c3.aid
+        WHERE c3.mid != baconMovies.mid AND a1.aid != a2.aid AND a1.fname != "Kevin" AND a1.lname != "Bacon"
+        GROUP BY a2.fname, a2.lname
 '''	
 
-	# Q12 ########################		
+	# Q12 ########################
+    # Assume that the popularity of an actor is reflected by the average rank of all the movies he/she has acted in. Find the top 20 most popular actors (in descreasing order of popularity) -- list the actor's first/last name, the total number of movies he/she has acted, and his/her popularity score. For simplicity, feel free to ignore ties at the number 20 spot (i.e., always show up to 20 only).
 	queries['q12'] = '''
 '''	
 
