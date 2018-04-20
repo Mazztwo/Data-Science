@@ -20,7 +20,6 @@ testingFile = ""
 prediction = 0
 
 def predict(argv):
-    print("Predict!")
     
     # Make globals accessible
     global trainingFile
@@ -36,9 +35,6 @@ def predict(argv):
     userID = int(argv[5])
     movieID = int(argv[6])
 
-
-
-
     # Error checking!
     #################
     # userID
@@ -46,12 +42,39 @@ def predict(argv):
     # training file unreadable
     # wrong algorithm
     # k not positive integer
+    if(isinstance(userID, int) == False or userID < 1):
+        print("ERROR: userID is invalid.")
+        return 0
+    elif(isinstance(movieID, int) == False or movieID < 1):
+        print("ERROR: movieID is invalid.")
+        return 0
+    elif(isinstance(k, int) == False < 1):
+        print("ERROR: k is ivalid.")
+        return 0
+    elif(algorithm != "average" and algorithm != "euclid" and algorithm != "pearson" and algorithm != "cosine"):
+        print("ERROR: algorithm is invalid.")
+        return 0
+
+    try:
+        with open(trainingFile) as file:
+            for row in file:
+                info = row.split()
+    except EnvironmentError:
+        print("ERROR: Training file could not be opened.")
+    
+
+
+    
+
+    #Training file structure:
+    # userID | movieID | rating | timestamp
+    # userID/movieID start: 1
+
 
     printOutput()
 
 
 def evaluate(argv):
-    print("Evaluate!")
 
     # Make globals accessible
     global trainingFile
@@ -71,6 +94,31 @@ def evaluate(argv):
     # training or testing files unreadable
     # wrong algorithm
     # k not positive integer
+    if(isinstance(k, int) == False < 1):
+        print("ERROR: k is ivalid.")
+        return 0
+    elif(algorithm != "average" and algorithm != "euclid" and algorithm != "pearson" and algorithm != "cosine"):
+        print("ERROR: algorithm is invalid.")
+        return 0
+
+    try:
+        with open(trainingFile) as file:
+            for row in file:
+                info = row.split()
+    except EnvironmentError:
+        print("ERROR: Training file could not be opened.")
+
+    try:
+        with open(testingFile) as file:
+            for row in file:
+                info = row.split()
+    except EnvironmentError:
+        print("ERROR: Testing file could not be opened.")
+
+
+    # Training file structure:
+    # userID | movieID | rating | timestamp
+    # userID/movieID start: 1
 
     printOutput()
 
