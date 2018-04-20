@@ -4,8 +4,6 @@
 ###########################
 
 import sys
-import pandas as pd
-import numpy as np
 from scipy.spatial.distance import euclidean, cityblock, cosine
 from scipy.stats import pearsonr
 
@@ -27,6 +25,7 @@ def predict(argv):
     global algorithm
     global userID
     global movieID
+    global prediction
 
     # Parse command line args
     trainingFile = argv[2]
@@ -44,32 +43,27 @@ def predict(argv):
     # k not positive integer
     if(isinstance(userID, int) == False or userID < 1):
         print("ERROR: userID is invalid.")
-        return 0
+        sys.exit()
     elif(isinstance(movieID, int) == False or movieID < 1):
         print("ERROR: movieID is invalid.")
-        return 0
+        sys.exit()
     elif(isinstance(k, int) == False < 1):
         print("ERROR: k is ivalid.")
-        return 0
+        sys.exit()
     elif(algorithm != "average" and algorithm != "euclid" and algorithm != "pearson" and algorithm != "cosine"):
         print("ERROR: algorithm is invalid.")
-        return 0
+        sys.exit()
 
-    try:
-        with open(trainingFile) as file:
-            for row in file:
-                info = row.split()
-    except EnvironmentError:
-        print("ERROR: Training file could not be opened.")
-    
-
-
-    
 
     #Training file structure:
     # userID | movieID | rating | timestamp
     # userID/movieID start: 1
 
+    if(algorithm == "average"):
+        average()
+
+
+    
 
     printOutput()
 
@@ -81,6 +75,7 @@ def evaluate(argv):
     global k
     global algorithm
     global testingFile
+    global prediction
 
     # Parse command line args
     trainingFile = argv[2]
@@ -96,10 +91,10 @@ def evaluate(argv):
     # k not positive integer
     if(isinstance(k, int) == False < 1):
         print("ERROR: k is ivalid.")
-        return 0
+        return -1
     elif(algorithm != "average" and algorithm != "euclid" and algorithm != "pearson" and algorithm != "cosine"):
         print("ERROR: algorithm is invalid.")
-        return 0
+        return -1
 
     try:
         with open(trainingFile) as file:
@@ -107,6 +102,7 @@ def evaluate(argv):
                 info = row.split()
     except EnvironmentError:
         print("ERROR: Training file could not be opened.")
+        return -1
 
     try:
         with open(testingFile) as file:
@@ -114,6 +110,7 @@ def evaluate(argv):
                 info = row.split()
     except EnvironmentError:
         print("ERROR: Testing file could not be opened.")
+        return -1
 
 
     # Training file structure:
@@ -141,7 +138,29 @@ def printOutput():
     print("myrex.movieID      =  %d" % (movieID)) 
     print("myrex.prediction   =  %f" % (prediction)) 
 
+def average():
 
+    global trainingFile
+    global prediction
+
+    try:
+        with open(trainingFile) as file:
+            
+            count = 0
+            total = 0
+
+            for row in file:
+                info = [int(n) for n in row.split()]
+                    
+                if(info[1] == movieID):
+                    count += 1
+                    total += info[2]
+
+            prediction = total / count
+
+    except EnvironmentError:
+        print("ERROR: Training file could not be opened.")
+        sys.exit()
 
 def main(argv):
 
