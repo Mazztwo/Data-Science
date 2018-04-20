@@ -4,7 +4,7 @@
 ###########################
 
 import sys
-from scipy.spatial.distance import euclidean, cityblock, cosine
+import pandas
 from scipy.stats import pearsonr
 
 # Make variables accessible to all functions
@@ -172,28 +172,16 @@ def euclid():
     global userID
     global movieID
 
+
+    # Make sure file exists
     try:
         with open(trainingFile) as file:
             
-            currUserRatings = {}
-            userSimilarities {}
-
-            for row in file:
-                info = [int(n) for n in row.split()]
-                    
-                if(info[0] == userID):
-                    currUserRatings[info[1]] = info[2]
-
-            prediction = float(total) / float(count)
-
-        if(len(currUserRatings) == 0):
-            print("ERROR: Could not calculate prediction.")
-            sys.exit()
-
     except EnvironmentError:
         print("ERROR: Training file could not be opened.")
         sys.exit()
 
+   
 
 
 
