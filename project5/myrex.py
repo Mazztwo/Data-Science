@@ -6,6 +6,8 @@
 import sys
 import pandas
 from scipy.stats import pearsonr
+import numpy as np
+from scipy.spatial.distance import euclidean, cosine
 
 # Make variables accessible to all functions
 command = ""
@@ -172,19 +174,49 @@ def euclid():
     global userID
     global movieID
 
+    userRatings = {}
+    tempUserRatings = {}
+    sim_weights = {}
+    ratings1 = []
+    ratings2 = []
+    i = 0
+    weights = 0.0
 
     # Make sure file exists
     try:
         with open(trainingFile) as file:
-            
+            pass
     except EnvironmentError:
         print("ERROR: Training file could not be opened.")
         sys.exit()
 
-   
+    column_names = ['userID', 'movieId', 'rating', 'timestamp']
+    dataFile = pandas.read_table(trainingFile, delimiter = '\t', names = column_names)
 
+    for row in dataFile[dataFile['userID'] == userID].itertuples():
+        #           |movieID|rating|
+        userRatings[row[2]] = row[3]
 
+    # Compute weighted similarities
+    for user in dataFile["userID"].unique():
+        if(user != userID):
+            # get shared ratings
+            for row in dataFile[dataFile['userID'] == user].itertuples():
+                if(row[2] in userRatings):
+                    ratings2.append(row[3])   
+                    ratings1.append(userRatings[row[2]])   
+        else:
+            continue
+        
+        dist = euclidean(ratings1, ratings2)
+        sim_weights[user] = 1.0 / (1.0 + dist)    
 
+    # Now compare to k nearest neighbors
+    if(k == 0): # compare to all
+        pass
+    else:
+        pass
+            
 
 
 
