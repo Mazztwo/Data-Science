@@ -61,7 +61,8 @@ def predict(argv):
 
     if(algorithm == "average"):
         average()
-
+    elif(algorithm == "euclid"):
+        euclid()
 
     
 
@@ -156,11 +157,49 @@ def average():
                     count += 1
                     total += info[2]
 
-            prediction = total / count
+            prediction = float(total) / float(count)
 
     except EnvironmentError:
         print("ERROR: Training file could not be opened.")
         sys.exit()
+
+
+def euclid():
+    
+    global trainingFile
+    global prediction
+    global k
+    global userID
+    global movieID
+
+    try:
+        with open(trainingFile) as file:
+            
+            currUserRatings = {}
+            userSimilarities {}
+
+            for row in file:
+                info = [int(n) for n in row.split()]
+                    
+                if(info[0] == userID):
+                    currUserRatings[info[1]] = info[2]
+
+            prediction = float(total) / float(count)
+
+        if(len(currUserRatings) == 0):
+            print("ERROR: Could not calculate prediction.")
+            sys.exit()
+
+    except EnvironmentError:
+        print("ERROR: Training file could not be opened.")
+        sys.exit()
+
+
+
+
+
+
+
 
 def main(argv):
 
