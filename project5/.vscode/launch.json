@@ -12,7 +12,7 @@
             "program": "${file}",
             "args": 
             [
-                "predict", "u1.base", "1", "pearson", "1", "1"
+                "predict", "u1.base", "2", "cosine", "1", "1"
             ]
         },
         {
