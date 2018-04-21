@@ -179,8 +179,7 @@ def euclid():
     sim_weights = {}
     ratings1 = []
     ratings2 = []
-    i = 0
-    weights = 0.0
+    weightsSum = 0.0
 
     # Make sure file exists
     try:
@@ -213,12 +212,29 @@ def euclid():
 
     # Now compare to k nearest neighbors
     if(k == 0): # compare to all
-        pass
+        for user in dataFile["userID"].unique():
+            if(user != userID):
+                for row in dataFile[dataFile['userID'] == user].itertuples():
+                    if(row[2] == movieID):
+                        prediction += row[3] * sim_weights[user]
+                        weightsSum += sim_weights[user]
     else:
-        pass
+        count = 0
+        sorted_weights = sorted(sim_weights.items(), key = lambda pair: pair[1], reverse=True)
+
+        for user, weight in sorted_weights:
+            if(count >= k):
+                break
+            if(user != userID):
+                for row in dataFile[dataFile['userID'] == user].itertuples():
+                    if(row[2] == movieID):
+                        prediction += row[3] * sim_weights[user]
+                        weightsSum += sim_weights[user]
+                        count += 1
+
             
 
-
+    prediction /= weightsSum
 
 
 def main(argv):
