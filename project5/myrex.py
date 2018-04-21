@@ -65,6 +65,8 @@ def predict(argv):
         average()
     elif(algorithm == "euclid"):
         euclid()
+    elif(algorithm == "pearson"):
+        pearson()
 
     
 
@@ -236,6 +238,79 @@ def euclid():
 
     prediction /= weightsSum
 
+
+def pearson():
+    global trainingFile
+    global prediction
+    global k
+    global userID
+    global movieID
+
+    userRatings = {}
+    tempUserRatings = {}
+    sim_weights = {}
+    ratings1 = []
+    ratings2 = []
+    weightsSum = 0.0
+
+    # Make sure file exists
+    try:
+        with open(trainingFile) as file:
+            pass
+    except EnvironmentError:
+        print("ERROR: Training file could not be opened.")
+        sys.exit()
+
+    column_names = ['userID', 'movieId', 'rating', 'timestamp']
+    dataFile = pandas.read_table(trainingFile, delimiter = '\t', names = column_names)
+
+    for row in dataFile[dataFile['userID'] == userID].itertuples():
+        #           |movieID|rating|
+        userRatings[row[2]] = row[3]
+
+    # Compute weighted similarities
+    for user in dataFile["userID"].unique():
+        if(user != userID):
+            # get shared ratings
+            for row in dataFile[dataFile['userID'] == user].itertuples():
+                if(row[2] in userRatings):
+                    ratings2.append(row[3])   
+                    ratings1.append(userRatings[row[2]])   
+        else:
+            continue
+        
+        dist = pearsonr(ratings1, ratings2)[0]
+        sim_weights[user] = dist   
+
+    # Now compare to k nearest neighbors
+    if(k == 0): # compare to all
+        for user in dataFile["userID"].unique():
+            if(user != userID):
+                for row in dataFile[dataFile['userID'] == user].itertuples():
+                    if(row[2] == movieID):
+                        normRating = (2.0 * (row[3] - 1.0) - 4.0) * 0.25
+                        prediction += normRating * sim_weights[user]
+                        weightsSum += sim_weights[user]
+    else:
+        count = 0
+        sorted_weights = sorted(sim_weights.items(), key = lambda pair: pair[1], reverse=True)
+
+        for user, weight in sorted_weights:
+            if(count >= k):
+                break
+            if(user != userID):
+                for row in dataFile[dataFile['userID'] == user].itertuples():
+                    if(row[2] == movieID):
+                        normRating = (2.0 * (row[3] - 1.0) - 4.0) * 0.25
+                        prediction += normRating * sim_weights[user]
+                        weightsSum += abs(sim_weights[user])
+                        count += 1
+
+            
+
+    prediction /= weightsSum
+
+    prediction = 1 + (((prediction + 1.0) * 4) / (2.0))
 
 def main(argv):
 
